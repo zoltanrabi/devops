@@ -1,0 +1,27 @@
+<template>
+    
+    <lightning-card title="CertificationList" icon-name="custom:custom14">
+        <ul class="slds-m-around_medium">
+            <template for:each={certificationDatas} for:item="certificationData">
+                <li key={certificationData.Name}>
+                    {certificationData.Contact__r.Name} - {certificationData.Certification__r.Name}
+                </li>
+            </template>
+        </ul>
+        <ul class="slds-m-around_medium">
+            <template for:each={accountName} for:item="certificationData">
+                <li key={certificationData.name}>
+                    {certificationData.name} - {certificationData.count}
+                </li>
+            </template>
+        </ul>
+        <div class="highlight">Total number of certification: {totalNumberOfCertifications}</div>
+        <canvas 
+        style="background-color: gray;"
+        class='gauge'
+        width='300'
+        height='200'
+        lwc:dom="manual">
+    </canvas>
+    </lightning-card>
+</template>

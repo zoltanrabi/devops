@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 5px;
+
+}
+
+.certCount{
+    text-align: center;
+    font-size: large;
+    display: block;
+}
+
+.gauge {
+    text-align: center;
+  }
+
+  .goal {
+    text-align: center;
+    font-size: large;
+    color: #c70000;
+  }

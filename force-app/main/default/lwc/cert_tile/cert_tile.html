@@ -1,0 +1,39 @@
+<template>
+    <div class="container">
+
+        <a onclick={tileClick}>
+  <article class="slds-card">
+    <div class="slds-card__header slds-grid">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__figure">
+          <span class="slds-icon_container slds-icon-standard-account" title="account">
+            <img class="badgeImage" src={certtypedata.badgeImage} alt="">
+          </span>
+        </div>
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">
+              <span>{certtypedata.name}</span>
+          </h2>
+        </div>
+      </header>
+    </div>
+    <div if:false={certtypedata.filtered}>
+    <div class="slds-card__body slds-card__body_inner">Acquired number of certification: {certtypedata.count}</div>
+    </div>
+  </article>
+</a>
+</div>
+</template>
+
+<!--
+<template>
+    <div class="container">
+        <a onclick={tileClick}>
+            <img class="badgeImage" src={certtypedata.badgeImage} alt="">
+            <div if:false={certtypedata.filtered}>
+                Acquired number of certification: {certtypedata.count}
+            </div>
+        </a>
+    </div>
+</template>
+-->

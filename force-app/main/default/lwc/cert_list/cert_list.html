@@ -1,0 +1,21 @@
+<template>
+    <template if:true={filtered}>
+        <div class="certCount">
+            Acquired number of certification by {filters.employeeName}: {certCount}
+        </div>
+    </template>
+    <div class="container">
+        <template for:each={certDataByType} for:item="certTypeData">
+            <c-cert_tile 
+                key={certTypeData.name} 
+                certtypedata={certTypeData}
+                ontileclick={handleTileClick}>
+            </c-cert_tile>
+        </template>
+    </div >
+    <div class="gauge" if:false={filtered}>
+        <c-cert_gauge>
+        </c-cert_gauge>
+        <div class="goal">FY22 Goal: 87 certification</div>
+    </div>
+</template>

@@ -1,0 +1,66 @@
+.slds-card {
+    width: 250px;
+    max-height: 100%;
+}
+
+.slds-icon-standard-account {
+    background: transparent;
+}
+
+.slds-card__header {
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    margin: 0;
+}
+
+.slds-card__body.slds-card__body_inner {
+    margin: 0px;
+}
+
+.slds-media__figure {
+    margin-right: 2px;
+}
+
+.slds-media__body, .slds-media__body>:last-child {
+    margin-bottom: 0;
+    justify-content: center;
+}
+.container {
+    border: 1px rgb(168, 166, 166) solid;
+    border-radius: 5px;
+    background-color: white;
+    margin:5px;
+    padding: 2px;
+    display: flex;
+    
+}
+
+.title {
+    font-weight: strong;
+}
+
+.badgeImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 110px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link {
+    color: rgb(159, 159, 159);
+}
+a:visited {
+    color: green;
+}
+a:hover {
+    color: hotpink;
+}
+a:active {
+    color: blue;
+}

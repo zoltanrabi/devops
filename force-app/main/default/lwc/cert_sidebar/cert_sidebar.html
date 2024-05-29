@@ -1,0 +1,37 @@
+<template>
+    <template if:true={certtype}>
+        <div class="container">
+            <img class="badgeImage" src={certtype.badgeImage} alt="">
+            <div class="certName">Certification name: {certtype.typeName}</div>
+            <br>
+            <hr>
+            <div class="peopleList">People who acquired this certification:</div>
+            <template for:each={certtype.owners} for:item="owner">
+                <ul class="slds-has-dividers_bottom-space" key={owner.name}>
+                <li class="slds-item" key={owner.name}>
+                    {owner.name}
+                </li>
+            </ul>
+            </template>
+        </div>
+        <hr>
+        <p class="training">For training material <a href={training} target="_blank">CLICK HERE</a>!</p>
+        <hr>
+        <lightning-record-edit-form object-api-name={certificateApplicationObject} onsubmit={handleSubmit} onsuccess={handleCertificationCreated} >
+            <lightning-messages></lightning-messages>
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={nameField} value={certtype.certAutoNumber} style="display: none;"></lightning-input-field>
+                    <lightning-input-field class="needReset" field-name={contactField} onchange={nameValidation}></lightning-input-field>
+                    <lightning-input-field class="certTypeField" field-name={certificationField} value={certtype.certTypeId.Id}></lightning-input-field>
+                </div>   
+             </div>
+             <div class="submitButton">
+                <lightning-button id="submitBut" type="submit" variant="brand" label="Create Certification Application"></lightning-button>
+             </div>
+        </lightning-record-edit-form>
+    </template>
+    <template if:false={certtype}>
+        <div class="sidebarNote">Select a certificate type to display more detail</div>
+    </template>
+</template>
