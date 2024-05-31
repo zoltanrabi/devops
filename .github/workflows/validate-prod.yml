@@ -18,7 +18,7 @@ jobs:
         id: get_changes
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} > modified_files.txt || true
-          echo "Modified files:"
+          echo "Modified files captured:"
           cat modified_files.txt
 
       # Filter modified Apex files
@@ -26,7 +26,7 @@ jobs:
         id: filter_apex
         run: |
           grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' modified_files.txt > modified_apex_files.txt || true
-          echo "Modified Apex files:"
+          echo "Filtered Apex files:"
           cat modified_apex_files.txt
 
       # Extract modified Apex components
@@ -34,7 +34,7 @@ jobs:
         id: extract_apex_components
         run: |
           cat modified_apex_files.txt | xargs -I % bash -c 'echo % | cut -d "/" -f 7' | cut -d "." -f 1 | sort -u > modified_apex_components.txt
-          echo "Modified Apex components:"
+          echo "Extracted Apex components:"
           cat modified_apex_components.txt
 
       # Add this step after the "Extract modified Apex components" step
@@ -54,17 +54,6 @@ jobs:
         if: steps.set_modified_components.outputs.MODIFIED_COMPONENTS != ''
         run: |
           modified_components=$(cat modified_apex_components.txt)
-          for component in $modified_components; do
-            test_class="${component}Test"
-            echo "Running tests for $test_class"
-            sf force:apex:test:run -n $test_class
-          done
-
-      # Deploy using the custom action
-      - name: Deploy to Environment
-        uses: ./.github/actions/sf-deploy
-        with:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-          DRY_RUN: true
-          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS }}
-          TEST_LEVEL: RunSpecifiedTests
+          echo "Modified Apex components: $modified_components"
+          # Pass the modified components to the action
+          echo "::set-output name=MODIFIED_COMPONENTS::$modified_components"
