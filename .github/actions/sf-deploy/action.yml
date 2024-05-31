@@ -63,7 +63,7 @@ runs:
     - name: Deploy to Environment
       shell: bash
       run: |
-        modified_components=("${{ inputs.MODIFIED_COMPONENTS }}")
+        modified_components=("${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS.split('\n') }}")
         deployFlags=(
             --manifest manifest/package.xml
             --wait ${{ inputs.WAIT }}
