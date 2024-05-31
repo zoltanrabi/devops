@@ -59,7 +59,7 @@ jobs:
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: true  # or false, depending on your needs
-          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS }}
+          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS.split('\n') }} # Split by newline to create a list
           TEST_LEVEL: RunSpecifiedTests
           WAIT: 30
           SOURCE_DIRECTORY: force-app
