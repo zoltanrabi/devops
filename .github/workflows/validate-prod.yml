@@ -17,7 +17,9 @@ jobs:
       - name: Get modified files
         id: get_changes
         run: |
-          echo "::set-output name=MODIFIED_FILES::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+          modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' || echo "")
+          echo "$modified_files" > modified_apex_files.txt
+
 
       # Filter modified Apex files
       - name: Filter Apex files
