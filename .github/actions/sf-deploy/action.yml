@@ -54,6 +54,7 @@ runs:
         echo '<?xml version="1.0" encoding="UTF-8"?>' > manifest/package.xml
         echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> manifest/package.xml
         echo '  <types>' >> manifest/package.xml
+        
         for classFile in $(find ${{ inputs.SOURCE_DIRECTORY }} -name '*.cls'); do
           className=$(basename "$classFile" .cls)
           skip=false
@@ -69,6 +70,24 @@ runs:
         done
         echo '    <name>ApexClass</name>' >> manifest/package.xml
         echo '  </types>' >> manifest/package.xml
+
+        echo '  <types>' >> manifest/package.xml
+        for triggerFile in $(find ${{ inputs.SOURCE_DIRECTORY }} -name '*.trigger'); do
+          triggerName=$(basename "$triggerFile" .trigger)
+          skip=false
+          for exclude in "${excludedClasses[@]}"; do
+            if [ "$triggerName" = "$exclude" ]; then
+              skip=true
+              break
+            fi
+          done
+          if [ "$skip" = false ]; then
+            echo "    <members>$triggerName</members>" >> manifest/package.xml
+          fi
+        done
+        echo '    <name>ApexTrigger</name>' >> manifest/package.xml
+        echo '  </types>' >> manifest/package.xml
+
         echo '  <version>52.0</version>' >> manifest/package.xml
         echo '</Package>' >> manifest/package.xml
     - name: Deploy to Environment
