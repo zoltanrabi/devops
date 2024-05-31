@@ -37,11 +37,11 @@ jobs:
           echo "Modified Apex components:"
           cat modified_apex_components.txt
 
-      # Print modified Apex components
+      # Add this step after the "Extract modified Apex components" step
       - name: Print modified Apex components
         run: cat modified_apex_components.txt
 
-      # Pass the modified components to the action
+      # Set the modified components output
       - name: Set modified components output
         id: set_modified_components
         run: |
@@ -57,7 +57,6 @@ jobs:
           for component in $modified_components; do
             test_class="${component}Test"
             echo "Running tests for $test_class"
-            # Example command to run tests for the corresponding test class
             sf force:apex:test:run -n $test_class
           done
 
