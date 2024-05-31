@@ -57,7 +57,7 @@ jobs:
       # Run tests for modified Apex components
       - name: Run tests for modified Apex components
         if: steps.set_modified_components.outputs.MODIFIED_COMPONENTS != ''
-        uses: ./github/actions/sf-deploy
+        uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: true  # or false, depending on your needs
           MODIFIED_COMPONENTS: $(cat modified_apex_components.txt | tr '\n' ',' | sed 's/,$//')
