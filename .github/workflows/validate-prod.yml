@@ -42,7 +42,6 @@ jobs:
           echo "Extracted Apex components:"
           cat modified_apex_components.txt
 
-      # Add this step after the "Extract modified Apex components" step
       - name: Print modified Apex components
         run: cat modified_apex_components.txt
 
@@ -60,7 +59,7 @@ jobs:
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: true  # or false, depending on your needs
-          MODIFIED_COMPONENTS: $(cat modified_apex_components.txt | tr '\n' ',' | sed 's/,$//')
+          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS }}
           TEST_LEVEL: RunSpecifiedTests
           WAIT: 30
           SOURCE_DIRECTORY: force-app
