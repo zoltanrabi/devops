@@ -50,7 +50,7 @@ runs:
       shell: bash
       run: |
         mkdir -p manifest
-        excludedClasses=(${{ inputs.EXCLUDE_CLASSES//,/ }})
+        excludedClasses=(${{ inputs.EXCLUDE_CLASSES }})
         excluded=($(printf "|%s" "${excludedClasses[@]}"))
         excluded=${excluded:1}
 
