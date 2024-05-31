@@ -46,7 +46,7 @@ runs:
       shell: bash
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
-    - name: Generate package.xml with exclusions
+    - name: Generate package.xml
       shell: bash
       run: |
         modified_components="${{ inputs.MODIFIED_COMPONENTS }}"

@@ -18,29 +18,54 @@ jobs:
         id: get_changes
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} > modified_files.txt || true
+          echo "Modified files:"
+          cat modified_files.txt
 
       # Filter modified Apex files
       - name: Filter Apex files
         id: filter_apex
         run: |
           grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' modified_files.txt > modified_apex_files.txt || true
+          echo "Modified Apex files:"
+          cat modified_apex_files.txt
 
       # Extract modified Apex components
       - name: Extract modified Apex components
         id: extract_apex_components
         run: |
           cat modified_apex_files.txt | xargs -I % bash -c 'echo % | cut -d "/" -f 7' | cut -d "." -f 1 | sort -u > modified_apex_components.txt
+          echo "Modified Apex components:"
+          cat modified_apex_components.txt
 
-      # Add this step after the "Extract modified Apex components" step
+      # Print modified Apex components
       - name: Print modified Apex components
         run: cat modified_apex_components.txt
 
-      # Run tests for modified Apex components
-      - name: Run tests for modified Apex components
-        id: run_tests
-        if: steps.extract_apex_components.outputs.modified_apex_components != ''
+      # Pass the modified components to the action
+      - name: Set modified components output
+        id: set_modified_components
         run: |
           modified_components=$(cat modified_apex_components.txt)
           echo "Modified Apex components: $modified_components"
-          # Pass the modified components to the action
           echo "::set-output name=MODIFIED_COMPONENTS::$modified_components"
+
+      # Run tests for modified Apex components
+      - name: Run tests for modified Apex components
+        if: steps.set_modified_components.outputs.MODIFIED_COMPONENTS != ''
+        run: |
+          modified_components=$(cat modified_apex_components.txt)
+          for component in $modified_components; do
+            test_class="${component}Test"
+            echo "Running tests for $test_class"
+            # Example command to run tests for the corresponding test class
+            sf force:apex:test:run -n $test_class
+          done
+
+      # Deploy using the custom action
+      - name: Deploy to Environment
+        uses: ./.github/actions/sf-deploy
+        with:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+          DRY_RUN: true
+          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS }}
+          TEST_LEVEL: RunSpecifiedTests
