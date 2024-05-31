@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Identify modified Apex files
+      # Identify modified files
       - name: Get modified files
         id: get_changes
         run: |
@@ -34,7 +34,11 @@ jobs:
       - name: Extract modified Apex components
         id: extract_apex_components
         run: |
-          grep -Eo '[^/]+(?=\.cls)' modified_apex_files.txt | sort -u > modified_apex_components.txt
+          while IFS= read -r line; do
+            component_name=$(basename "$line" .cls)
+            echo "$component_name" >> temp_apex_components.txt
+          done < modified_apex_files.txt
+          sort -u temp_apex_components.txt > modified_apex_components.txt
           echo "Extracted Apex components:"
           cat modified_apex_components.txt
 
