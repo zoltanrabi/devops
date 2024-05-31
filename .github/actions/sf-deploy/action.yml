@@ -50,21 +50,17 @@ runs:
       shell: bash
       run: |
         mkdir -p manifest
-        excludedClasses=(${EXCLUDE_CLASSES//,/ })
+        excludedClasses=(${{ inputs.EXCLUDE_CLASSES//,/ }})
+        excluded=($(printf "|%s" "${excludedClasses[@]}"))
+        excluded=${excluded:1}
+
         echo '<?xml version="1.0" encoding="UTF-8"?>' > manifest/package.xml
         echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> manifest/package.xml
+
         echo '  <types>' >> manifest/package.xml
-        
-        for classFile in $(find ${{ inputs.SOURCE_DIRECTORY }} -name '*.cls'); do
+        find ${{ inputs.SOURCE_DIRECTORY }} -name '*.cls' -print0 | while IFS= read -r -d '' classFile; do
           className=$(basename "$classFile" .cls)
-          skip=false
-          for exclude in "${excludedClasses[@]}"; do
-            if [ "$className" = "$exclude" ]; then
-              skip=true
-              break
-            fi
-          done
-          if [ "$skip" = false ]; then
+          if [[ ! "$excluded" =~ $className ]]; then
             echo "    <members>$className</members>" >> manifest/package.xml
           fi
         done
@@ -72,16 +68,9 @@ runs:
         echo '  </types>' >> manifest/package.xml
 
         echo '  <types>' >> manifest/package.xml
-        for triggerFile in $(find ${{ inputs.SOURCE_DIRECTORY }} -name '*.trigger'); do
+        find ${{ inputs.SOURCE_DIRECTORY }} -name '*.trigger' -print0 | while IFS= read -r -d '' triggerFile; do
           triggerName=$(basename "$triggerFile" .trigger)
-          skip=false
-          for exclude in "${excludedClasses[@]}"; do
-            if [ "$triggerName" = "$exclude" ]; then
-              skip=true
-              break
-            fi
-          done
-          if [ "$skip" = false ]; then
+          if [[ ! "$excluded" =~ $triggerName ]]; then
             echo "    <members>$triggerName</members>" >> manifest/package.xml
           fi
         done
