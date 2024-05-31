@@ -63,17 +63,16 @@ runs:
     - name: Deploy to Environment
       shell: bash
       run: |
-        modified_components=("${{ inputs.MODIFIED_COMPONENTS }}") # Wrap in parentheses to create an array
+        modified_components=("${{ inputs.MODIFIED_COMPONENTS }}")
         deployFlags=(
             --manifest manifest/package.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
-        for component in "${modified_components[@]}"; do # Use "${modified_components[@]}" to loop through each component in the array
+        for component in "${modified_components[@]}"; do
           deployFlags+=( --tests "$component" )
         done
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( --dry-run )
         fi
         sf project deploy start "${deployFlags[@]}"
-
