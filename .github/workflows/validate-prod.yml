@@ -6,14 +6,17 @@ on:
       - master
     paths:
       - 'force-app/**'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Validate on Production
         uses: ./.github/actions/sf-deploy
         with:
-          SFDX_AUTH_URL: ${{  secrets.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
           DRY_RUN: true
           EXCLUDE_CLASSES: 'AccountTrigger,AccountTriggerHandler,AccountTriggerLogic,Bela,BypassControl,CaseTrigger,CaseTriggerHandler,CaseTriggerLogic,CertificationController,CertificationSummaryController'
