@@ -46,22 +46,20 @@ runs:
       shell: bash
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
-    - name: Generate package.xml
+    - name: Generate package.xml with exclusions
       shell: bash
       run: |
-        excludedClasses=${{ inputs.EXCLUDE_CLASSES }}
-        excludeArray=(${excludedClasses//,/ })
-        
-        find ${{ inputs.SOURCE_DIRECTORY }} -name '*.cls' > allClasses.txt
+        mkdir -p manifest
+        excludedClasses=(${EXCLUDE_CLASSES//,/ })
         echo '<?xml version="1.0" encoding="UTF-8"?>' > manifest/package.xml
         echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> manifest/package.xml
         echo '  <types>' >> manifest/package.xml
-
+        find ${{ inputs.SOURCE_DIRECTORY }} -name '*.cls' > allClasses.txt
         while IFS= read -r classFile; do
           className=$(basename "$classFile" .cls)
           skip=false
-          for exclude in "${excludeArray[@]}"; do
-            if [ "$className" == "$exclude" ]; then
+          for exclude in "${excludedClasses[@]}"; do
+            if [ "$className" = "$exclude" ]; then
               skip=true
               break
             fi
@@ -70,11 +68,10 @@ runs:
             echo "    <members>$className</members>" >> manifest/package.xml
           fi
         done < allClasses.txt
-        
         echo '    <name>ApexClass</name>' >> manifest/package.xml
         echo '  </types>' >> manifest/package.xml
         echo '  <version>52.0</version>' >> manifest/package.xml
-        echo '</Package>' >> manifest/package.xml
+        rm allClasses.txt
     - name: Deploy to Environment
       shell: bash
       run: |

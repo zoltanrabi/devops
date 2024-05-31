@@ -6,14 +6,11 @@ on:
       - master
     paths:
       - 'force-app/**'
-
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: Validate on Production
         uses: ./.github/actions/sf-deploy
         with:
