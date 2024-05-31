@@ -16,4 +16,3 @@ jobs:
         with:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
           DRY_RUN: true
-          EXCLUDE_CLASSES: 'AccountTrigger,AccountTriggerHandler,AccountTriggerLogic,BypassControl,CaseTrigger,CaseTriggerHandler,CaseTriggerLogic,CertificationController,CertificationSummaryController'
