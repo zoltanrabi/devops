@@ -49,16 +49,17 @@ runs:
     - name: Generate package.xml with exclusions
       shell: bash
       run: |
-        excludedClasses=(${EXCLUDE_CLASSES//,/ })
+        excludedClasses=(${{ inputs.EXCLUDE_CLASSES }})
         echo '<?xml version="1.0" encoding="UTF-8"?>' > manifest/package.xml
         echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> manifest/package.xml
         echo '  <types>' >> manifest/package.xml
-        for class in "${excludedClasses[@]}"; do
+        for class in ${excludedClasses//,/ }; do
           echo "    <!-- Excluding class $class -->" >> manifest/package.xml
-          echo "    <members>$class</members>" >> manifest/package.xml
         done
+        echo '    <members>*</members>' >> manifest/package.xml
         echo '    <name>ApexClass</name>' >> manifest/package.xml
         echo '  </types>' >> manifest/package.xml
+        echo '  <version>52.0</version>' >> manifest/package.xml
         echo '</Package>' >> manifest/package.xml
     - name: Deploy to Environment
       shell: bash
