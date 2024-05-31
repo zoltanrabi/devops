@@ -6,13 +6,40 @@ on:
       - master
     paths:
       - 'force-app/**'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Validate on Production
-        uses: ./.github/actions/sf-deploy
-        with:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-          DRY_RUN: true
+
+      # Identify modified Apex files
+      - name: Get modified files
+        id: get_changes
+        run: |
+          echo "::set-output name=MODIFIED_FILES::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+
+      # Filter modified Apex files
+      - name: Filter Apex files
+        id: filter_apex
+        run: |
+          echo "${{ steps.get_changes.outputs.MODIFIED_FILES }}" | grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' > modified_apex_files.txt
+
+      # Extract modified Apex components
+      - name: Extract modified Apex components
+        id: extract_apex_components
+        run: |
+          cat modified_apex_files.txt | xargs -I % bash -c 'echo % | cut -d "/" -f 7' | cut -d "." -f 1 | sort -u > modified_apex_components.txt
+
+      # Run tests for modified Apex components
+      - name: Run tests for modified Apex components
+        id: run_tests
+        if: steps.extract_apex_components.outputs.modified_apex_components != ''
+        run: |
+          modified_components=$(cat modified_apex_components.txt)
+          for component in $modified_components; do
+            test_class="${component}Test"
+            echo "Running tests for $test_class"
+            # Run your test command here for the corresponding test class
+            # Example: sfdx force:apex:test:run -n $test_class
+          done

@@ -8,6 +8,10 @@ inputs:
   DRY_RUN:
     description: "Validate deploy and run Apex tests but don't save to the org."
     type: boolean
+  MODIFIED_COMPONENTS:
+    description: "List of modified Apex classes and triggers."
+    type: string
+    required: true
   TEST_LEVEL:
     description: "Deployment Apex testing level."
     type: choice
@@ -42,10 +46,19 @@ runs:
       shell: bash
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
-    - name: Generate package.xml
+    - name: Generate package.xml with exclusions
       shell: bash
       run: |
-        sf project generate manifest --source-dir ${{ inputs.SOURCE_DIRECTORY }} --output-dir manifest       
+        modified_components="${{ inputs.MODIFIED_COMPONENTS }}"
+        echo '<?xml version="1.0" encoding="UTF-8"?>' > manifest/package.xml
+        echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> manifest/package.xml
+        echo '  <types>' >> manifest/package.xml
+        for component in $modified_components; do
+          echo "    <members>$component</members>" >> manifest/package.xml
+        done
+        echo '    <name>ApexClass</name>' >> manifest/package.xml
+        echo '  </types>' >> manifest/package.xml
+        echo '</Package>' >> manifest/package.xml
     - name: Deploy to Environment
       shell: bash
       run: |
