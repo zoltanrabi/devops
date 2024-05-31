@@ -17,14 +17,13 @@ jobs:
       - name: Get modified files
         id: get_changes
         run: |
-          modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' || true)
-          echo "$modified_files" > modified_apex_files.txt
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > modified_files.txt || true
 
       # Filter modified Apex files
       - name: Filter Apex files
         id: filter_apex
         run: |
-          echo "${{ steps.get_changes.outputs.MODIFIED_FILES }}" | grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' > modified_apex_files.txt
+          grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' modified_files.txt > modified_apex_files.txt || true
 
       # Extract modified Apex components
       - name: Extract modified Apex components
@@ -38,9 +37,6 @@ jobs:
         if: steps.extract_apex_components.outputs.modified_apex_components != ''
         run: |
           modified_components=$(cat modified_apex_components.txt)
-          for component in $modified_components; do
-            test_class="${component}Test"
-            echo "Running tests for $test_class"
-            # Run your test command here for the corresponding test class
-            # Example: sfdx force:apex:test:run -n $test_class
-          done
+          echo "Modified Apex components: $modified_components"
+          # Pass the modified components to the action
+          echo "::set-output name=MODIFIED_COMPONENTS::$modified_components"
