@@ -57,8 +57,11 @@ jobs:
       # Run tests for modified Apex components
       - name: Run tests for modified Apex components
         if: steps.set_modified_components.outputs.MODIFIED_COMPONENTS != ''
-        run: |
-          modified_components=$(cat modified_apex_components.txt)
-          echo "Modified Apex components: $modified_components"
-          # Pass the modified components to the action
-          echo "::set-output name=MODIFIED_COMPONENTS::$modified_components"
+        uses: ./github/actions/sf-deploy
+        with:
+          DRY_RUN: true  # or false, depending on your needs
+          MODIFIED_COMPONENTS: $(cat modified_apex_components.txt | tr '\n' ',' | sed 's/,$//')
+          TEST_LEVEL: RunSpecifiedTests
+          WAIT: 30
+          SOURCE_DIRECTORY: force-app
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
