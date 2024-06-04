@@ -52,6 +52,7 @@ runs:
       shell: bash
       run: |
         git fetch --all
+        git config --global --add safe.directory /__w/core-platform/core-platform
         sf sgd:source:delta --to ${{ github.base_ref }} --from ${{ github.sha }} --output 'manifest'
         echo < manifest/package.xml
     - name: Deploy to Environment
