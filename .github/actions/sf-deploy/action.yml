@@ -51,8 +51,7 @@ runs:
     - name: Generate package.xml
       shell: bash
       run: |
-        git fetch origin ${{ github.base_ref }} --depth=0
-        sf sgd:source:delta --to ${{ github.base_ref }} --from ${{ github.sha }} --output 'manifest'
+        sf sgd:source:delta --to "HEAD" --from ${{ github.sha }} --output 'manifest'
         echo < manifest/package.xml
     - name: Deploy to Environment
       shell: bash
