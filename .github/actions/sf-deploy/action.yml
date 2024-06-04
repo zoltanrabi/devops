@@ -52,7 +52,7 @@ runs:
       shell: bash
       run: |
         git fetch origin ${{ github.base_ref }} --depth=1
-        sf sgd:source:delta --to ${{ github.base_ref }} --from ${{ github.sha }} --output 'manifest/package.xml'
+        sf sgd:source:delta --to ${{ github.base_ref }} --from ${{ github.sha }} --output 'manifest'
         echo < manifest/package.xml
     - name: Deploy to Environment
       shell: bash
