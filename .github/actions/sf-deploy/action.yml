@@ -43,6 +43,7 @@ runs:
       run: |
         npm install -g @salesforce/cli
         sf --version
+        sf plugins:install sfdx-git-delta
     - name: Login to Environment
       shell: bash
       run: |
