@@ -55,12 +55,10 @@ runs:
     - name: Deploy to Environment
       shell: bash
       run: |
-        modified_components=$(echo "${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS }}" | tr '\n' ' ')
         deployFlags=(
             --manifest manifest/package.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
-            --tests "${modified_components[@]}" # Pass modified components as tests
         )
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( --dry-run )
