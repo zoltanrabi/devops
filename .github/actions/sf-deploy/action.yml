@@ -51,16 +51,7 @@ runs:
     - name: Generate package.xml
       shell: bash
       run: |
-        modified_components="${{ inputs.MODIFIED_COMPONENTS }}"
-        echo '<?xml version="1.0" encoding="UTF-8"?>' > manifest/package.xml
-        echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> manifest/package.xml
-        echo '  <types>' >> manifest/package.xml
-        for component in $modified_components; do
-          echo "    <members>$component</members>" >> manifest/package.xml
-        done
-        echo '    <name>ApexClass</name>' >> manifest/package.xml
-        echo '  </types>' >> manifest/package.xml
-        echo '</Package>' >> manifest/package.xml
+        sf sgd:source:delta --to ${{ github.base_ref }} --from ${{ github.sha }} --output "manifest/package.xml"
     - name: Deploy to Environment
       shell: bash
       run: |

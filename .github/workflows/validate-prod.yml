@@ -11,8 +11,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       # Identify modified files
       - name: Get modified files
@@ -59,8 +58,8 @@ jobs:
         if: steps.set_modified_components.outputs.MODIFIED_COMPONENTS != ''
         uses: ./.github/actions/sf-deploy
         with:
-          DRY_RUN: true
-          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS }}
+          DRY_RUN: true  # or false, depending on your needs
+          MODIFIED_COMPONENTS: ${{ steps.set_modified_components.outputs.MODIFIED_COMPONENTS.split('\n') }}
           TEST_LEVEL: RunSpecifiedTests
           WAIT: 30
           SOURCE_DIRECTORY: force-app
