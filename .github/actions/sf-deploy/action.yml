@@ -51,13 +51,13 @@ runs:
     - name: Generate package.xml
       shell: bash
       run: |
-        sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output 'manifest'
-        echo < manifest/package.xml
+        sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output '.'
+        echo < package/package.xml
     - name: Deploy to Environment
       shell: bash
       run: |
         deployFlags=(
-            --manifest manifest/package.xml
+            --manifest package/package.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
