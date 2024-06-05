@@ -8,7 +8,7 @@ on:
       - 'force-app/**'
 
 jobs:
-  validate:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
