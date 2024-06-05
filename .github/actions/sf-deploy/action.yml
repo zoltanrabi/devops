@@ -54,11 +54,14 @@ runs:
         sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output '.'
         echo "Deployment package:"
         cat package/package.xml
+        echo "Destructive Changes:"
+        cat destructiveChanges/destructiveChanges.xml
     - name: Deploy to Environment
       shell: bash
       run: |
         deployFlags=(
             --manifest package/package.xml
+            --postdestructivechanges destructiveChanges/destructiveChanges.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
