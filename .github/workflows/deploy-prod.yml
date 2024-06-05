@@ -1,4 +1,4 @@
-name: Validate Production Pull Request
+name: Deploy Production
 
 on:
   push:
