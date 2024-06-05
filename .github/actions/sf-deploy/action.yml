@@ -52,8 +52,9 @@ runs:
       shell: bash
       run: |
         sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output '.'
-        echo < package/package.xml
-        echo < .github/actions/sf-deploy/action.yml
+        cat package/package.xml
+        cat .github/actions/sf-deploy/action.yml
+        cat ./.github/actions/sf-deploy/action.yml
     - name: Deploy to Environment
       shell: bash
       run: |
