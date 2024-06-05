@@ -20,7 +20,7 @@ jobs:
         id: get_changes
         run: |
           git fetch origin ${{ github.base_ref }} --depth=1
-          git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} > modified_files.txt || true
+          git diff --name-only origin/master ${{ github.sha }} > modified_files.txt || true  # Compare with origin/master
           echo "Modified files captured:"
           cat modified_files.txt
 
