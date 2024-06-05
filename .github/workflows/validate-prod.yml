@@ -12,12 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Identify modified files
       - name: Get modified files
         id: get_changes
         run: |
-          git fetch origin ${{ github.base_ref }} --depth=0
+          git fetch origin ${{ github.base_ref }} --depth=1
           git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} > modified_files.txt || true
           echo "Modified files captured:"
           cat modified_files.txt
