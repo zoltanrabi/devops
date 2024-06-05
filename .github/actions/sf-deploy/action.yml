@@ -61,7 +61,7 @@ runs:
       run: |
         deployFlags=(
             --manifest package/package.xml
-            --postdestructivechanges destructiveChanges/destructiveChanges.xml
+            --post-destructive-changes destructiveChanges/destructiveChanges.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
