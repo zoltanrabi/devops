@@ -15,46 +15,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Identify modified files
-      - name: Get modified files
-        id: get_changes
-        run: |
-          git fetch origin ${{ github.base_ref }} --depth=1
-          git diff --name-only origin/master ${{ github.sha }} > modified_files.txt || true  # Compare with origin/master
-          echo "Modified files captured:"
-          cat modified_files.txt
-
-      # Filter modified Apex files
-      - name: Filter Apex files
-        id: filter_apex
-        run: |
-          grep -E 'force-app/main/default/classes/|force-app/main/default/triggers/' modified_files.txt > modified_apex_files.txt || true
-          echo "Filtered Apex files:"
-          cat modified_apex_files.txt
-
-      # Extract modified Apex components
-      - name: Extract modified Apex components
-        id: extract_apex_components
-        run: |
-          while IFS= read -r line; do
-            component_name=$(basename "$line" .cls)
-            echo "$component_name" >> temp_apex_components.txt
-          done < modified_apex_files.txt
-          sort -u temp_apex_components.txt > modified_apex_components.txt
-          echo "Extracted Apex components:"
-          cat modified_apex_components.txt
-
-      - name: Print modified Apex components
-        run: cat modified_apex_components.txt
-
-      # Set the modified components output
-      - name: Set modified components output
-        id: set_modified_components
-        run: |
-          modified_components=$(cat modified_apex_components.txt)
-          echo "Modified Apex components: $modified_components"
-          echo "::set-output name=MODIFIED_COMPONENTS::$modified_components"
-
       # Run tests for modified Apex components
       - name: Run tests for modified Apex components
         if: steps.set_modified_components.outputs.MODIFIED_COMPONENTS != ''
