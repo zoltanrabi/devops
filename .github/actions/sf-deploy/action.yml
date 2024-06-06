@@ -44,6 +44,11 @@ runs:
         npm install -g @salesforce/cli
         sf --version
         echo y | sf plugins:install sfdx-git-delta
+
+    - name: Print Python version
+      shell: bash
+      run: python --version
+      
     - name: Login to Environment
       shell: bash
       run: |
