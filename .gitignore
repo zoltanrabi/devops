@@ -8,9 +8,6 @@
 .localdevserver/
 deploy-options.json
 
-# CI
-.github/
-
 # LWC VSCode autocomplete
 **/lwc/jsconfig.json
 
