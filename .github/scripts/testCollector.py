@@ -31,6 +31,6 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                     if os.path.isfile(test_class_file):
                         test_classes.append(apex_class_name + 'Test')
 
-	string_list = ','.join(test_classes)
-	print('Test classes found: '+string_list);
+    string_list = ','.join(test_classes)
+    print('Test classes found: '+string_list);
     return string_list
