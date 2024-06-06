@@ -61,6 +61,11 @@ runs:
         cat package/package.xml
         echo "Destructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
+    - name: Collect test classes
+      shell: bash
+      run: |
+        tests = python ./.github/scripts/testCollector.py
+        echo tests
     - name: Deploy to Environment
       shell: bash
       run: |
