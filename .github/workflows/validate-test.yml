@@ -1,14 +1,14 @@
-name: Deploy Production
+name: Validate Production Pull Request
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
+      - test
     paths:
       - 'force-app/**'
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,10 +17,10 @@ jobs:
 
       # Run tests for modified Apex components
       - name: Run tests for modified Apex components
-        uses: ./.github/actions/sf-deploy
+        uses: ./.github/actions/sf-deploy-test
         with:
-          DRY_RUN: false  # or false, depending on your needs
+          DRY_RUN: true  # or false, depending on your needs
           TEST_LEVEL: RunLocalTests
           WAIT: 30
           SOURCE_DIRECTORY: force-app
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}

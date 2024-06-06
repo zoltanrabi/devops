@@ -47,7 +47,7 @@ runs:
     - name: Login to Environment
       shell: bash
       run: |
-        sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL_TEST }}")
+        sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
     - name: Generate package.xml
       shell: bash
       run: |

@@ -3,7 +3,7 @@ name: Deploy Production
 on:
   push:
     branches:
-      - main
+      - test
     paths:
       - 'force-app/**'
 
@@ -23,4 +23,4 @@ jobs:
           TEST_LEVEL: RunLocalTests
           WAIT: 30
           SOURCE_DIRECTORY: force-app
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
