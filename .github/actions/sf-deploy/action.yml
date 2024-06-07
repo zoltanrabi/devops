@@ -70,7 +70,7 @@ runs:
     - name: Deploy to Environment
       shell: bash
       run: |
-      echo $TEST_LIST
+        echo $TEST_LIST
         deployFlags=(
             --manifest package/package.xml
             --post-destructive-changes destructiveChanges/destructiveChanges.xml
