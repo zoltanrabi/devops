@@ -64,7 +64,7 @@ runs:
     - name: Collect test classes
       shell: bash
       run: |
-        TESTS="$(python ./.github/scripts/testCollector.py)"
+        TESTS=$(python ./.github/scripts/testCollector.py)
         echo $TEST
     - name: Deploy to Environment
       shell: bash
