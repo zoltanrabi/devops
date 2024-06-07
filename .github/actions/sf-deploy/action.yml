@@ -65,8 +65,7 @@ runs:
       shell: bash
       run: |
         TESTS=$(python ./.github/scripts/testCollector.py)
-        echo "TEST_CLASSES=$test_classes" >> $GITHUB_ENV
-        echo "::set-output name=test_classes::$test_classes"
+        echo $TEST
     - name: Deploy to Environment
       shell: bash
       run: |

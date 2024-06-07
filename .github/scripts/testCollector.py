@@ -19,7 +19,6 @@ def list_apex_classes(package_xml_path, classes_folder_path):
         name = types.find('ns:name', namespace)
         if name is not None and name.text == 'ApexClass':
             for member in types.findall('ns:members', namespace):
-                print(member.text)
                 apex_class_name = member.text
                 apex_classes.append(apex_class_name)
                 
@@ -33,7 +32,6 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                         test_classes.append(apex_class_name + 'Test')
 
     string_list = ','.join(test_classes)
-    print('Test classes found: '+string_list)
     return string_list
 
-list_apex_classes(package_xml_path, classes_folder_path)
+exit(list_apex_classes(package_xml_path, classes_folder_path))
