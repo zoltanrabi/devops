@@ -1,10 +1,10 @@
 import xml.etree.ElementTree as ET
 import os
 
-def list_apex_classes(package_xml_path, classes_folder_path):
-    package_xml_path = 'package/package.xml'
-    classes_folder_path = '/force-app/main/default/classes'
+package_xml_path = 'package/package.xml'
+classes_folder_path = '/force-app/main/default/classes'
 
+def list_apex_classes(package_xml_path, classes_folder_path):
     # Parse the XML file
     tree = ET.parse(package_xml_path)
     root = tree.getroot()
@@ -35,3 +35,5 @@ def list_apex_classes(package_xml_path, classes_folder_path):
     string_list = ','.join(test_classes)
     print('Test classes found: '+string_list)
     return string_list
+
+list_apex_classes(package_xml_path, classes_folder_path)
