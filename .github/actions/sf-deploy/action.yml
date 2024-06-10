@@ -77,10 +77,10 @@ runs:
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
-        if["${{ inputs.TEST_LEVEL }}" = "RunSpecifiedTests"]; then
-          deployFlags+=( --dry-run )
+        if[[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
+          deployFlags+=( -r $TEST_LIST )
         fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
-          deployFlags+=( -r $TEST_LIST )
+          deployFlags+=( --dry-run )
         fi
         sf project deploy start "${deployFlags[@]}"
