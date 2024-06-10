@@ -70,6 +70,7 @@ runs:
     - name: Deploy to Environment
       shell: bash
       run: |
+        ls -a
         echo $TEST_LIST
         deployFlags=(
             --manifest package/package.xml
