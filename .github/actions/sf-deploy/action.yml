@@ -76,9 +76,10 @@ runs:
             --post-destructive-changes destructiveChanges/destructiveChanges.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
-            -r $TEST_LIST
         )
-        if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
+        if["${{ inputs.TEST_LEVEL }}" = "RunSpecifiedTests"]; then
           deployFlags+=( --dry-run )
+        if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
+          deployFlags+=( -r $TEST_LIST )
         fi
         sf project deploy start "${deployFlags[@]}"
