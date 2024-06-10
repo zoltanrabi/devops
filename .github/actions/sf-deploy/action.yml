@@ -64,13 +64,13 @@ runs:
     - name: Collect test classes
       shell: bash
       run: |
+        ls -a
         TESTS=$(python ./.github/scripts/testCollector.py)
         echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
         echo $TESTS
     - name: Deploy to Environment
       shell: bash
       run: |
-        ls -a
         echo $TEST_LIST
         deployFlags=(
             --manifest package/package.xml
