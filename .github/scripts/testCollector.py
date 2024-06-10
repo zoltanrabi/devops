@@ -29,7 +29,7 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                     if os.path.isfile(test_class_file):
                         test_classes.add(apex_class_name + 'Test')
 
-    string_list = ','.join(test_classes)
+    string_list = ' '.join(test_classes)
     return string_list
 
 print(list_apex_classes(package_xml_path, classes_folder_path))
