@@ -44,6 +44,11 @@ runs:
         npm install -g @salesforce/cli
         sf --version
         echo y | sf plugins:install sfdx-git-delta
+
+    - name: Print Python version
+      shell: bash
+      run: python --version
+      
     - name: Login to Environment
       shell: bash
       run: |
@@ -56,15 +61,26 @@ runs:
         cat package/package.xml
         echo "Destructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
+    - name: Collect test classes
+      shell: bash
+      run: |
+        TESTS=$(python ./.github/scripts/testCollector.py)
+        echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
+        echo $TESTS
     - name: Deploy to Environment
       shell: bash
       run: |
+        echo $TEST_LIST
         deployFlags=(
             --manifest package/package.xml
             --post-destructive-changes destructiveChanges/destructiveChanges.xml
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
+        if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
+          deployFlags+=( --tests $TEST_LIST )
+          echo "RunSpecifiedTests"
+        fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( --dry-run )
         fi
