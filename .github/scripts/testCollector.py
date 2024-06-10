@@ -26,10 +26,8 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                 else:
                     # Check if there is a corresponding Test class file in the classes folder
                     test_class_file = os.path.join(classes_folder_path, apex_class_name + 'Test.cls')
-                    print(os.path.abspath(apex_class_name + 'Test.cls'))
                     if os.path.isfile(test_class_file):
                         test_classes.add(apex_class_name + 'Test')
-                    else:
 
     string_list = ' '.join(test_classes)
     return string_list
