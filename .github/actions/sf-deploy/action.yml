@@ -64,7 +64,7 @@ runs:
     - name: Collect test classes
       shell: bash
       run: |
-        cd /force-app/main/default/classes
+        cd force-app/main/default/classes
         ls -a
         TESTS=$(python ./.github/scripts/testCollector.py)
         echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
