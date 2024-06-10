@@ -77,7 +77,7 @@ runs:
             --wait ${{ inputs.WAIT }}
             --test-level ${{ inputs.TEST_LEVEL }}
         )
-        if[[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
+        if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
           deployFlags+=( -r $TEST_LIST )
         fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
