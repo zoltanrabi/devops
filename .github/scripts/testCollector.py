@@ -13,7 +13,7 @@ def list_apex_classes(package_xml_path, classes_folder_path):
     namespace = {'ns': 'http://soap.sforce.com/2006/04/metadata'}
 
     # Find all Apex classes
-    test_classes = {}
+    test_classes = { }
     for types in root.findall('ns:types', namespace):
         name = types.find('ns:name', namespace)
         if name is not None and name.text == 'ApexClass':
