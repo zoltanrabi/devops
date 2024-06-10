@@ -75,7 +75,6 @@ runs:
             --manifest package/package.xml
             --post-destructive-changes destructiveChanges/destructiveChanges.xml
             --wait ${{ inputs.WAIT }}
-            --test-level ${{ inputs.TEST_LEVEL }}
         )
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
@@ -88,7 +87,7 @@ runs:
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -z "$TEST_LIST" ]]; then
           deployFlags+=( --test-level NoTestRun )
-          echo "RunLocalTests"
+          echo "NoTestRun"
         fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( --dry-run )
