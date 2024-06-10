@@ -14,7 +14,7 @@ def list_apex_classes(package_xml_path, classes_folder_path):
 
     # Find all Apex classes
     apex_classes = []
-    test_classes = []
+    test_classes = {}
     for types in root.findall('ns:types', namespace):
         name = types.find('ns:name', namespace)
         if name is not None and name.text == 'ApexClass':
@@ -29,7 +29,7 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                     # Check if there is a corresponding Test class file in the classes folder
                     test_class_file = os.path.join(classes_folder_path, apex_class_name + 'Test.cls')
                     if os.path.isfile(test_class_file):
-                        test_classes.append(apex_class_name + 'Test')
+                        test_classes.add(apex_class_name + 'Test')
 
     string_list = ','.join(test_classes)
     return string_list
