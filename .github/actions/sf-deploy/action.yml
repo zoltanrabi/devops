@@ -78,7 +78,7 @@ runs:
             --test-level ${{ inputs.TEST_LEVEL }}
         )
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
-          deployFlags+=( -r $TEST_LIST )
+          deployFlags+=( --runtests $TEST_LIST )
           echo "RunSpecifiedTests"
         fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
