@@ -79,6 +79,7 @@ runs:
         )
         if["${{ inputs.TEST_LEVEL }}" = "RunSpecifiedTests"]; then
           deployFlags+=( --dry-run )
+        fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( -r $TEST_LIST )
         fi
