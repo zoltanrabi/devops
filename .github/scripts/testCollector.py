@@ -26,14 +26,10 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                 else:
                     # Check if there is a corresponding Test class file in the classes folder
                     test_class_file = os.path.join(classes_folder_path, apex_class_name + 'Test.cls')
-                    print("Checking for test class file:", test_class_file)
-                    os.chdir("/home/runner/work/mydevorg/mydevorg/force-app/main/default/classes/")
                     print(os.path.abspath(apex_class_name + 'Test.cls'))
                     if os.path.isfile(test_class_file):
-                        print("Test class file found.")
                         test_classes.add(apex_class_name + 'Test')
                     else:
-                        print("Test class file not found.")
 
     string_list = ' '.join(test_classes)
     return string_list
