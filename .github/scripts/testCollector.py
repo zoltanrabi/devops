@@ -31,5 +31,3 @@ def list_apex_classes(package_xml_path, classes_folder_path):
 
     string_list = ' '.join(test_classes)
     return string_list
-
-print(list_apex_classes(package_xml_path, classes_folder_path))
