@@ -50,7 +50,7 @@ runs:
     - name: Collect test classes
       shell: bash
       run: |
-        if [[ "${{ inputs.TEST_LEVEL }}" != "RunSpecifiedTests" ]]; then
+        if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
           TESTS=$(python ./.github/scripts/testCollector.py)
           echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
           echo "The following test were specified to run:" $TESTS
