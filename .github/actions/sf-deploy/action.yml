@@ -45,7 +45,7 @@ runs:
         sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output '.'
         echo "Deployment package:"
         cat package/package.xml
-        echo "Destructive Changes:"
+        echo -e "\nDestructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
     - name: Collect test classes
       shell: bash
@@ -58,7 +58,6 @@ runs:
     - name: Deploy to Environment
       shell: bash
       run: |
-        echo $TEST_LIST
         deployFlags=(
             --manifest package/package.xml
             --post-destructive-changes destructiveChanges/destructiveChanges.xml
