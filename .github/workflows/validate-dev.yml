@@ -22,4 +22,5 @@ jobs:
           DRY_RUN: true  # or false, depending on your needs
           TEST_LEVEL: RunSpecifiedTests
           WAIT: 30
+          SOURCE_DIRECTORY: force-app
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}

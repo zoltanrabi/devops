@@ -22,6 +22,10 @@ inputs:
     description: "Number of minutes to wait for command to complete and display results."
     type: number
     default: 30
+  SOURCE_DIRECTORY:
+    description: "Path to the local source files to deploy."
+    type: string
+    default: force-app
   SFDX_AUTH_URL:
     description: "The auth url tied to your deployment environment"
     type: string
