@@ -1,6 +1,6 @@
 name: Salesforce Metadata Deploy
 description: Builds and deploys metadata to a specified environment
-author: jawills
+author: accadzo
 branding:
   icon: code
   color: blue
@@ -9,10 +9,6 @@ inputs:
   DRY_RUN:
     description: "Validate deploy and run Apex tests but don't save to the org."
     type: boolean
-  MODIFIED_COMPONENTS:
-    description: "List of modified Apex classes and triggers."
-    type: string
-    required: true
   TEST_LEVEL:
     description: "Deployment Apex testing level."
     type: choice
@@ -26,10 +22,6 @@ inputs:
     description: "Number of minutes to wait for command to complete and display results."
     type: number
     default: 30
-  SOURCE_DIRECTORY:
-    description: "Path to the local source files to deploy."
-    type: string
-    default: force-app
   SFDX_AUTH_URL:
     description: "The auth url tied to your deployment environment"
     type: string
@@ -42,13 +34,7 @@ runs:
       shell: bash
       run: |
         npm install -g @salesforce/cli
-        sf --version
-        echo y | sf plugins:install sfdx-git-delta
-
-    - name: Print Python version
-      shell: bash
-      run: python --version
-      
+        echo y | sf plugins:install sfdx-git-delta  
     - name: Login to Environment
       shell: bash
       run: |
@@ -64,9 +50,11 @@ runs:
     - name: Collect test classes
       shell: bash
       run: |
-        TESTS=$(python ./.github/scripts/testCollector.py)
-        echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
-        echo $TESTS
+        if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
+          TESTS=$(python ./.github/scripts/testCollector.py)
+          echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
+          echo "The following test were specified to run:" $TESTS
+        fi
     - name: Deploy to Environment
       shell: bash
       run: |
@@ -79,15 +67,15 @@ runs:
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
           deployFlags+=( --tests $TEST_LIST )
-          echo "RunSpecifiedTests"
+          echo "Test runs in the following mode: RunSpecifiedTests"
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" != "RunSpecifiedTests" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
-          echo ${{ inputs.TEST_LEVEL }}
+          echo "Test runs in the following mode: "${{ inputs.TEST_LEVEL }}
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -z "$TEST_LIST" ]]; then
           deployFlags+=( --test-level NoTestRun )
-          echo "NoTestRun"
+          echo "Test runs in the following mode: NoTestRun"
         fi
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( --dry-run )
