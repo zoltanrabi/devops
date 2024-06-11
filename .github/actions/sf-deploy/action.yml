@@ -81,9 +81,9 @@ runs:
           deployFlags+=( --tests $TEST_LIST )
           echo "RunSpecifiedTests"
         fi
-        if [[ "${{ inputs.TEST_LEVEL }}" == "RunLocalTests" ]]; then
+        if [[ "${{ inputs.TEST_LEVEL }}" != "RunSpecifiedTests" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
-          echo "RunLocalTests"
+          echo ${{ inputs.TEST_LEVEL }}
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -z "$TEST_LIST" ]]; then
           deployFlags+=( --test-level NoTestRun )
