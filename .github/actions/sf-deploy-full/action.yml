@@ -7,7 +7,7 @@ branding:
 
 inputs:
   DRY_RUN:
-    description: "Validate deploy and run Apex tests but don't save to the org."
+    description: "Validate deploy and run Apex tests but don't save to the org." 
     type: boolean
   TEST_LEVEL:
     description: "Deployment Apex testing level."
