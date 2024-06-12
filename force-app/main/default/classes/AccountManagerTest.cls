@@ -35,4 +35,4 @@ public class AccountManagerTest {
         Integer count = [SELECT COUNT() FROM Account WHERE Id = :acc.Id];
         System.assertEquals(0, count, 'Account should be deleted');
     }
-} 
+}  
