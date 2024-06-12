@@ -1,0 +1,104 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef1"
+            },
+            "Name": "Acme CorpOpportunity",
+            "AccountId": "@AccountRef1",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef2"
+            },
+            "Name": "Global IncOpportunity",
+            "AccountId": "@AccountRef2",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef3"
+            },
+            "Name": "Tech SolutionsOpportunity",
+            "AccountId": "@AccountRef3",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef4"
+            },
+            "Name": "Health PlusOpportunity",
+            "AccountId": "@AccountRef4",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef5"
+            },
+            "Name": "Finance GroupOpportunity",
+            "AccountId": "@AccountRef5",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef6"
+            },
+            "Name": "Retail GiantsOpportunity",
+            "AccountId": "@AccountRef6",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef7"
+            },
+            "Name": "Edu WorldOpportunity",
+            "AccountId": "@AccountRef7",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef8"
+            },
+            "Name": "Energy CoOpportunity",
+            "AccountId": "@AccountRef8",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef9"
+            },
+            "Name": "Food CorpOpportunity",
+            "AccountId": "@AccountRef9",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        },
+        {
+            "attributes": {
+                "type": "Opportunity",
+                "referenceId": "OpportunityRef10"
+            },
+            "Name": "Travel AgencyOpportunity",
+            "AccountId": "@AccountRef10",
+            "CloseDate": "2025-12-31",
+            "StageName": "Prospecting"
+        }
+    ]
+}

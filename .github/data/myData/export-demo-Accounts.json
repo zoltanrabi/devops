@@ -1,0 +1,214 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef1"
+            },
+            "Name": "Acme Corp",
+            "AccountNumber": "12345",
+            "Site": "Main Office",
+            "Phone": "123-456-7890",
+            "Website": "www.acme.com",
+            "BillingStreet": "123 Main St",
+            "BillingCity": "Springfield",
+            "BillingState": "Illinois",
+            "BillingPostalCode": "62701",
+            "BillingCountry": "United States",
+            "ShippingStreet": "456 Elm St",
+            "ShippingCity": "Springfield",
+            "ShippingState": "Illinois",
+            "ShippingPostalCode": "62701",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef2"
+            },
+            "Name": "Global Inc",
+            "AccountNumber": "67890",
+            "Site": "HQ",
+            "Phone": "987-654-3210",
+            "Website": "www.global.com",
+            "BillingStreet": "789 Maple Ave",
+            "BillingCity": "Metropolis",
+            "BillingState": "New York",
+            "BillingPostalCode": "10001",
+            "BillingCountry": "United States",
+            "ShippingStreet": "101 Pine St",
+            "ShippingCity": "Metropolis",
+            "ShippingState": "New York",
+            "ShippingPostalCode": "10001",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef3"
+            },
+            "Name": "Tech Solutions",
+            "AccountNumber": "54321",
+            "Site": "Branch",
+            "Phone": "555-123-4567",
+            "Website": "www.techsolutions.com",
+            "BillingStreet": "234 Tech St",
+            "BillingCity": "Innovation",
+            "BillingState": "California",
+            "BillingPostalCode": "90210",
+            "BillingCountry": "United States",
+            "ShippingStreet": "567 Innovation Blvd",
+            "ShippingCity": "Innovation",
+            "ShippingState": "California",
+            "ShippingPostalCode": "90210",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef4"
+            },
+            "Name": "Health Plus",
+            "AccountNumber": "67812",
+            "Site": "Regional Office",
+            "Phone": "444-987-6543",
+            "Website": "www.healthplus.com",
+            "BillingStreet": "345 Health Ave",
+            "BillingCity": "Wellness",
+            "BillingState": "Texas",
+            "BillingPostalCode": "73301",
+            "BillingCountry": "United States",
+            "ShippingStreet": "890 Wellness Rd",
+            "ShippingCity": "Wellness",
+            "ShippingState": "Texas",
+            "ShippingPostalCode": "73301",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef5"
+            },
+            "Name": "Finance Group",
+            "AccountNumber": "11223",
+            "Site": "Main Branch",
+            "Phone": "222-444-8888",
+            "Website": "www.financegroup.com",
+            "BillingStreet": "456 Money St",
+            "BillingCity": "Capital City",
+            "BillingState": "Washington",
+            "BillingPostalCode": "98001",
+            "BillingCountry": "United States",
+            "ShippingStreet": "789 Finance Blvd",
+            "ShippingCity": "Capital City",
+            "ShippingState": "Washington",
+            "ShippingPostalCode": "98001",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef6"
+            },
+            "Name": "Retail Giants",
+            "AccountNumber": "99887",
+            "Site": "Main Store",
+            "Phone": "333-555-7777",
+            "Website": "www.retailgiants.com",
+            "BillingStreet": "567 Shopping Ln",
+            "BillingCity": "Commerce",
+            "BillingState": "Florida",
+            "BillingPostalCode": "33101",
+            "BillingCountry": "United States",
+            "ShippingStreet": "890 Retail Rd",
+            "ShippingCity": "Commerce",
+            "ShippingState": "Florida",
+            "ShippingPostalCode": "33101",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef7"
+            },
+            "Name": "Edu World",
+            "AccountNumber": "33445",
+            "Site": "Campus",
+            "Phone": "666-777-8888",
+            "Website": "www.eduworld.com",
+            "BillingStreet": "678 Learning Blvd",
+            "BillingCity": "Scholars",
+            "BillingState": "Massachusetts",
+            "BillingPostalCode": "02101",
+            "BillingCountry": "United States",
+            "ShippingStreet": "123 Education St",
+            "ShippingCity": "Scholars",
+            "ShippingState": "Massachusetts",
+            "ShippingPostalCode": "02101",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef8"
+            },
+            "Name": "Energy Co",
+            "AccountNumber": "55678",
+            "Site": "Plant",
+            "Phone": "111-222-3333",
+            "Website": "www.energyco.com",
+            "BillingStreet": "789 Power Ave",
+            "BillingCity": "Energyville",
+            "BillingState": "Oregon",
+            "BillingPostalCode": "97001",
+            "BillingCountry": "United States",
+            "ShippingStreet": "456 Renewable Rd",
+            "ShippingCity": "Energyville",
+            "ShippingState": "Oregon",
+            "ShippingPostalCode": "97001",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef9"
+            },
+            "Name": "Food Corp",
+            "AccountNumber": "22334",
+            "Site": "Factory",
+            "Phone": "888-999-0000",
+            "Website": "www.foodcorp.com",
+            "BillingStreet": "890 Grocery Ln",
+            "BillingCity": "Foodtown",
+            "BillingState": "Ohio",
+            "BillingPostalCode": "44101",
+            "BillingCountry": "United States",
+            "ShippingStreet": "123 Produce Blvd",
+            "ShippingCity": "Foodtown",
+            "ShippingState": "Ohio",
+            "ShippingPostalCode": "44101",
+            "ShippingCountry": "United States"
+        },
+        {
+            "attributes": {
+                "type": "Account",
+                "referenceId": "AccountRef10"
+            },
+            "Name": "Travel Agency",
+            "AccountNumber": "44556",
+            "Site": "Office",
+            "Phone": "999-000-1111",
+            "Website": "www.travelagency.com",
+            "BillingStreet": "901 Holiday St",
+            "BillingCity": "Vacay",
+            "BillingState": "Hawaii",
+            "BillingPostalCode": "96801",
+            "BillingCountry": "United States",
+            "ShippingStreet": "456 Adventure Rd",
+            "ShippingCity": "Vacay",
+            "ShippingState": "Hawaii",
+            "ShippingPostalCode": "96801",
+            "ShippingCountry": "United States"
+        }
+    ]
+}
