@@ -16,7 +16,7 @@ jobs:
 
       # Run tests for modified Apex components
       - name: Run tests for modified Apex components
-        uses: ./.github/actions/sf-deploy
+        uses: ./.github/actions/sf-deploy-full
         with:
           DRY_RUN: false  # or false, depending on your needs
           TEST_LEVEL: RunLocalTests
