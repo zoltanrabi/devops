@@ -1,0 +1,32 @@
+name: Salesforce Data Import
+description: Imports record data to a specified environment
+author: accadzo
+branding:
+  icon: code
+  color: blue
+
+inputs:
+  WAIT:
+    description: "Number of minutes to wait for command to complete and display results."
+    type: number
+    default: 30
+  SFDX_AUTH_URL:
+    description: "The auth url tied to your deployment environment"
+    type: string
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Salesforce CLI
+      shell: bash
+      run: |
+        npm install -g @salesforce/cli
+    - name: Login to Environment
+      shell: bash
+      run: |
+        sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
+    - name: Import data to Environment
+      shell: bash
+      run: |
+        sf data import tree --target-org default --plan .github/data/myData/export-demo-Account-Contact-Opportunity-plan.json
