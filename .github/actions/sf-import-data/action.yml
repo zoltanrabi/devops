@@ -29,4 +29,4 @@ runs:
     - name: Import data to Environment
       shell: bash
       run: |
-        sf data import tree --target-org default --plan .github/data/myData/export-demo-Account-Contact-Opportunity-plan.json
+        sf data import tree --plan .github/data/myData/export-demo-Account-Contact-Opportunity-plan.json
