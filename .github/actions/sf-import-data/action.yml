@@ -14,6 +14,10 @@ inputs:
     description: "The auth url tied to your deployment environment"
     type: string
     required: true
+  DATA_FOLDER:
+    description: "Path to the data import plan JSON file"
+    type: string
+    required: true
 
 runs:
   using: "composite"
