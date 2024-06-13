@@ -1,0 +1,19 @@
+name: Import Data To Dev
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Import data to target org
+        uses: ./.github/actions/sf-import-data
+        with:
+          WAIT: 30
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
