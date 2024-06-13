@@ -33,4 +33,4 @@ runs:
     - name: Import data to Environment
       shell: bash
       run: |
-        sf data import tree --plan ${{ inputs.FOLDDATA_FOLDERER }}
+        sf data import tree --plan ${{ inputs.DATA_FOLDER }}
