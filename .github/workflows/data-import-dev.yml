@@ -16,4 +16,4 @@ jobs:
         uses: ./.github/actions/sf-import-data
         with:
           WAIT: 30
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}
