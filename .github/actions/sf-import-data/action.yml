@@ -14,6 +14,10 @@ inputs:
     description: "The auth url tied to your deployment environment"
     type: string
     required: true
+  DATA_FOLDER:
+    description: "Path to the data import plan JSON file"
+    type: string
+    required: true
 
 runs:
   using: "composite"
@@ -29,4 +33,4 @@ runs:
     - name: Import data to Environment
       shell: bash
       run: |
-        sf data import tree --plan ${{ inputs.FOLDDATA_FOLDERER }}
+        sf data import tree --plan ${{ inputs.DATA_FOLDER }}
