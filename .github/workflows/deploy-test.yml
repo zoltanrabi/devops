@@ -27,8 +27,8 @@ jobs:
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
 
-      - name: checkApprovals
-        id: checkApprovals
+      - name: Check approvals
+        id: check_approvals
         run: |
           const pr = context.payload.pull_request;
 
@@ -41,10 +41,10 @@ jobs:
           const requiredApprovers = pr.requested_reviewers.map(reviewer => reviewer.login);
           const approvedReviewers = reviewsResponse.data.filter(review => review.state === 'APPROVED').map(review => review.user.login);
 
-          const allApproved = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
+          const checkApprovals = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
 
           console.log(`Required Approvers: ${requiredApprovers}`);
           console.log(`Approved Reviewers: ${approvedReviewers}`);
-          console.log(`All required approvers approved: ${allApproved}`);
+          console.log(`All required approvers approved: ${checkApprovals}`);
 
-          return allApproved; // Returns true if all required approvers have approved
+          return checkApprovals; // Returns true if all required approvers have approved
