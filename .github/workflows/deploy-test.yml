@@ -10,43 +10,42 @@ on:
       - submitted
 
 jobs:
-  check_approvals:
-    runs-on: ubuntu-latest
-    outputs:
-      all_approved: ${{ steps.check.outputs.all_approved }}
-    steps:
-      - name: Check approvals
-        id: check_approvals
-        run: |
-          const pr = context.payload.pull_request;
-
-          const reviewsResponse = await github.rest.pulls.listReviews({
-            owner: pr.base.user.login,
-            repo: pr.base.repo.name,
-            pull_number: pr.number
-          });
-
-          const requiredApprovers = pr.requested_reviewers.map(reviewer => reviewer.login);
-          const approvedReviewers = reviewsResponse.data.filter(review => review.state === 'APPROVED').map(review => review.user.login);
-
-          const checkApprovals = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
-
-          console.log(`Required Approvers: ${requiredApprovers}`);
-          console.log(`Approved Reviewers: ${approvedReviewers}`);
-          console.log(`All required approvers approved: ${checkApprovals}`);
-
-          return checkApprovals; // Returns true if all required approvers have approved
   deploy:
-    needs: check_approvals
-    if: needs.check_approvals.outputs.all_approved == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # Run tests for modified Apex components
+      - name: Check Approvals
+        id: check_approvals
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const reviewsResponse = await github.rest.pulls.listReviews({
+              owner: pr.base.user.login,
+              repo: pr.base.repo.name,
+              pull_number: pr.number
+            });
+
+            const requiredApprovers = pr.requested_reviewers.map(reviewer => reviewer.login);
+            const approvedReviewers = reviewsResponse.data.filter(review => review.state === 'APPROVED').map(review => review.user.login);
+
+            const allApproved = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
+
+            console.log(`Required Approvers: ${requiredApprovers}`);
+            console.log(`Approved Reviewers: ${approvedReviewers}`);
+            console.log(`All required approvers approved: ${allApproved}`);
+
+            if (!allApproved) {
+              core.setFailed('Not all required approvers have approved the pull request.');
+            }
+
+      # Run tests for modified Apex components only if all approvals are met
       - name: Run tests for modified Apex components
+        if: success()
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: false  # or false, depending on your needs
