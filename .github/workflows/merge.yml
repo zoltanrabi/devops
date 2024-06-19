@@ -2,17 +2,13 @@ name: "Merge"
 
 on:
   workflow_run:
-    workflows: 
-      - Deploy To Test
+    workflows: [Deploy To Test]
     types:
       - completed
 
 jobs:
   merge:
     runs-on: "ubuntu-latest"
-    if: >
-      github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success'
     steps:
       - name: "Print event context"
         run: |
