@@ -2,7 +2,7 @@ name: "Merge"
 
 on:
   workflow_run:
-    workflows: ["validate"]
+    workflows: ["Validate Test Pull Request"]
     types:
       - "completed"
 
