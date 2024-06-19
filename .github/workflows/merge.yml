@@ -14,7 +14,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     steps:
       - name: "Set up GitHub Script"
-        uses: "actions/github-script@v7"
+        uses: "actions/github-script@v6"
         with:
           github-token: "${{ secrets.SFDX_WORKFLOW_TOKEN }}"
           script: |
