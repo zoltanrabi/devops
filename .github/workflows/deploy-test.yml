@@ -28,7 +28,7 @@ jobs:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
 
       - name: checkApprovals
-        id: check_approvals
+        id: checkApprovals
         run: |
           const pr = context.payload.pull_request;
 
