@@ -9,25 +9,22 @@ on:
 
 jobs:
   merge:
-    name: "Merge"
-
     runs-on: "ubuntu-latest"
-
-        if: >
+    if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
-
-    - name: "Merge pull request"
+    steps:
+      - name: "Merge pull request"
         uses: "actions/github-script@v5"
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          script: |
-            const pullRequest = context.payload.workflow_run.pull_requests[0]
-            const repository = context.repo
+          with:
+            github-token: "${{ secrets.GITHUB_TOKEN }}"
+            script: |
+              const pullRequest = context.payload.workflow_run.pull_requests[0]
+              const repository = context.repo
 
-            await github.rest.pulls.merge({
-              merge_method: "merge",
-              owner: repository.owner,
-              pull_number: pullRequest.number,
-              repo: repository.repo,
-            })
+              await github.rest.pulls.merge({
+                merge_method: "merge",
+                owner: repository.owner,
+                pull_number: pullRequest.number,
+                repo: repository.repo,
+              })
