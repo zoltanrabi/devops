@@ -2,8 +2,7 @@ name: "Merge"
 
 on:
   workflow_run:
-    workflows: 
-      - Deploy To Test
+    workflows: [Deploy To Test]
     types:
       - completed
 
