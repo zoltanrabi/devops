@@ -10,23 +10,11 @@ on:
       - submitted
 
 jobs:
-  deploy:
+  check_approvals:
     runs-on: ubuntu-latest
-    if: checkApprovals()
+    outputs:
+      all_approved: ${{ steps.check.outputs.all_approved }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      # Run tests for modified Apex components
-      - name: Run tests for modified Apex components
-        uses: ./.github/actions/sf-deploy
-        with:
-          DRY_RUN: false  # or false, depending on your needs
-          TEST_LEVEL: RunSpecifiedTests
-          WAIT: 30
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
-
       - name: Check approvals
         id: check_approvals
         run: |
@@ -48,3 +36,20 @@ jobs:
           console.log(`All required approvers approved: ${checkApprovals}`);
 
           return checkApprovals; // Returns true if all required approvers have approved
+  deploy:
+    needs: check_approvals
+    if: needs.check_approvals.outputs.all_approved == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Run tests for modified Apex components
+      - name: Run tests for modified Apex components
+        uses: ./.github/actions/sf-deploy
+        with:
+          DRY_RUN: false  # or false, depending on your needs
+          TEST_LEVEL: RunSpecifiedTests
+          WAIT: 30
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
