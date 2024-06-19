@@ -1,15 +1,18 @@
 name: Deploy To Test
 
 on:
-  push:
+  pull_request_review:
     branches:
       - test
     paths:
       - 'force-app/**'
+    types:
+      - submitted
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: checkApprovals()
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,3 +26,25 @@ jobs:
           TEST_LEVEL: RunSpecifiedTests
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
+
+      - name: Check approvals
+        id: check_approvals
+        run: |
+          const pr = context.payload.pull_request;
+
+          const reviewsResponse = await github.rest.pulls.listReviews({
+            owner: pr.base.user.login,
+            repo: pr.base.repo.name,
+            pull_number: pr.number
+          });
+
+          const requiredApprovers = pr.requested_reviewers.map(reviewer => reviewer.login);
+          const approvedReviewers = reviewsResponse.data.filter(review => review.state === 'APPROVED').map(review => review.user.login);
+
+          const allApproved = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
+
+          console.log(`Required Approvers: ${requiredApprovers}`);
+          console.log(`Approved Reviewers: ${approvedReviewers}`);
+          console.log(`All required approvers approved: ${allApproved}`);
+
+          return allApproved; // Returns true if all required approvers have approved
