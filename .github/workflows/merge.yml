@@ -16,7 +16,7 @@ jobs:
       - name: "Set up GitHub Script"
         uses: "actions/github-script@v5"
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: "${{ secrets.SFDX_WORKFLOW_TOKEN }}"
           script: |
             const pullRequest = context.payload.workflow_run.pull_requests[0];
             const repository = context.repo;
