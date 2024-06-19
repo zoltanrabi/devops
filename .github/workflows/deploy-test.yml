@@ -43,9 +43,28 @@ jobs:
               core.setFailed('Not all required approvers have approved the pull request.');
             }
 
+      - name: Check Other Workflow Status
+        id: check_workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: pr.base.user.login,
+              repo: pr.base.repo.name,
+              branch: pr.head.ref,
+              event: 'pull_request'
+            });
+
+            const validateWorkflow = runs.workflow_runs.find(run => run.name === 'Validate Test Pull Request' && run.head_sha === pr.head.sha);
+
+            if (!validateWorkflow || validateWorkflow.conclusion !== 'success') {
+              core.setFailed('The Validate Test Pull Request workflow has not passed.');
+            }
       # Run tests for modified Apex components only if all approvals are met
       - name: Run tests for modified Apex components
-        if: success()
+        if: ${{ steps.check_approvals.outcome == 'success' && steps.check_workflow.outcome == 'success' }}
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: false  # or false, depending on your needs
