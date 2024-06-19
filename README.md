@@ -1,5 +1,14 @@
 # Salesforce DX Project: Next Steps
 
+Our GitHub CI steps:
+-Commit changes
+-Create PR with the changes
+-Validate the changes (only run necessary tests, changed tests)
+-Assignee review the PR
+-Assignee Approve PR
+-Deployment starts to the org
+-if deployment successful -> merge code into git
+
 Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
 
 ## How Do You Plan to Deploy Your Changes?
