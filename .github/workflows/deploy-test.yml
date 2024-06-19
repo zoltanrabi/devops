@@ -27,7 +27,7 @@ jobs:
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
 
-      - name: Check approvals
+      - name: checkApprovals
         id: check_approvals
         run: |
           const pr = context.payload.pull_request;
