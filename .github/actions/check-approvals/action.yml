@@ -1,0 +1,9 @@
+name: 'Check Approvals and Workflow Status'
+description: 'Checks if all required reviewers approved the PR and another workflow passed.'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'node12'
+  main: './.github/scripts/checkApprovals.js'
