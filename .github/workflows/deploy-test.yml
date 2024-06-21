@@ -17,57 +17,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check Approvals
-        id: check_approvals
-        uses: actions/github-script@v6
+      - name: Check Approvals and Workflow Status
+        id: check_approvals_status
+        uses: ./.github/actions/check-approvals
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = context.payload.pull_request;
-            const reviewsResponse = await github.rest.pulls.listReviews({
-              owner: pr.base.user.login,
-              repo: pr.base.repo.name,
-              pull_number: pr.number
-            });
 
-            const requiredApprovers = pr.requested_reviewers.map(reviewer => reviewer.login);
-            const approvedReviewers = reviewsResponse.data.filter(review => review.state === 'APPROVED').map(review => review.user.login);
-
-            const allApproved = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
-
-            console.log(`Required Approvers: ${requiredApprovers}`);
-            console.log(`Approved Reviewers: ${approvedReviewers}`);
-            console.log(`All required approvers approved: ${allApproved}`);
-
-            if (!allApproved) {
-              core.setFailed('Not all required approvers have approved the pull request.');
-            }
-
-      - name: Check Other Workflow Status
-        id: check_workflow
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = context.payload.pull_request;
-            const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
-              owner: pr.base.user.login,
-              repo: pr.base.repo.name,
-              branch: pr.head.ref,
-              event: 'pull_request'
-            });
-
-            const validateWorkflow = runs.workflow_runs.find(run => run.name === 'Validate Test Pull Request' && run.head_sha === pr.head.sha);
-
-            if (!validateWorkflow || validateWorkflow.conclusion !== 'success') {
-              core.setFailed('The Validate Test Pull Request workflow has not passed.');
-            }
-      # Run tests for modified Apex components only if all approvals are met
       - name: Run tests for modified Apex components
-        if: ${{ steps.check_approvals.outcome == 'success' && steps.check_workflow.outcome == 'success' }}
+        if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' }}
         uses: ./.github/actions/sf-deploy
         with:
-          DRY_RUN: false  # or false, depending on your needs
+          DRY_RUN: false
           TEST_LEVEL: RunSpecifiedTests
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
