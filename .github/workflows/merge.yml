@@ -10,9 +10,12 @@ jobs:
   merge:
     runs-on: "ubuntu-latest"
     if: >
-      github.event.workflow_run.event == 'pull_request_review' &&
+      github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: "Auto Merge Pull Request"
         uses: ./.github/actions/merge
         with:
