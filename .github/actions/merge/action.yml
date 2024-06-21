@@ -1,0 +1,9 @@
+name: 'Auto Merge Pull Request'
+description: 'Automatically merges the pull request.'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'node12'
+  main: '../../scripts/merge.js'
