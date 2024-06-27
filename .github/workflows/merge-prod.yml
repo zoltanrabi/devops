@@ -1,0 +1,22 @@
+name: "Merge"
+
+on:
+  workflow_run:
+    workflows: ["Deploy To Prod"]
+    types:
+      - completed
+
+jobs:
+  merge:
+    runs-on: "ubuntu-latest"
+    if: >
+      github.event.workflow_run.event == 'pull_request_review' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: "Auto Merge Pull Request"
+        uses: ./.github/actions/merge
+        with:
+          github-token: "${{ secrets.SFDX_WORKFLOW_TOKEN }}"
