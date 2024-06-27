@@ -42,8 +42,8 @@ runs:
     - name: Fetch branches
       shell: bash
       run: |
-        git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
-        git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
+        git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
+        git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
     - name: Generate package.xml
       shell: bash
       run: |

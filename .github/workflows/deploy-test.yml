@@ -17,11 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set Up Git Branches
-        run: |
-          echo "BASE_BRANCH=$(jq -r '.pull_request.base.ref' "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
-          echo "COMPARE_BRANCH=$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
-
       - name: Check Approvals and Workflow Status
         id: check_approvals_status
         uses: ./.github/actions/check-approvals
