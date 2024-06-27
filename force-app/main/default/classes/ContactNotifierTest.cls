@@ -30,4 +30,4 @@ public class ContactNotifierTest {
 
         System.assertEquals(emailInvocationsBefore + 1, emailInvocationsAfter, 'Email should be sent');
     }
-}
+} 
