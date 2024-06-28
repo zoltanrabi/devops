@@ -21,7 +21,7 @@ public class AccountManagerTest {
 
         Account updatedAcc = [SELECT Id, Name FROM Account WHERE Id = :acc.Id];
         System.assertEquals('Updated Name', updatedAcc.Name, 'Account name should be updated');
-    }
+    }  
 
     @isTest
     static void testDeleteAccount() {
