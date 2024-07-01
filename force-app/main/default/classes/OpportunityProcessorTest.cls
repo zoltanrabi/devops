@@ -25,4 +25,4 @@ public class OpportunityProcessorTest {
 
         System.assertEquals(3000, total, 'Total amount should be calculated correctly');
     }
-}
+}  
