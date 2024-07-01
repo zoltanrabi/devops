@@ -2,16 +2,13 @@ name: Deploy To Test
 
 on:
   pull_request_review:
-    branches:
-      - test
-    paths:
-      - 'force-app/**'
     types:
       - submitted
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'test'
     steps:
       - uses: actions/checkout@v3
         with:
