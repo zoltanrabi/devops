@@ -1,17 +1,14 @@
 name: Deploy To Prod
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'force-app/**'
+  pull_request_review:
     types:
       - submitted
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'main'
     steps:
       - uses: actions/checkout@v3
         with:
