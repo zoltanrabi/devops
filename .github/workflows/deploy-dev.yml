@@ -1,17 +1,14 @@
 name: Deploy To Dev
 
 on:
-  push:
-    branches:
-      - dev
-    paths:
-      - 'force-app/**'
+  pull_request_review:
     types:
       - submitted
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'dev'
     steps:
       - uses: actions/checkout@v3
         with:

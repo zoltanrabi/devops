@@ -7,6 +7,29 @@ Our GitHub CI steps:
 -Assignee review the PR
 -Assignee Approve PR
 -Deployment starts to the org
+
+
+
+Dev:
+Validacio (delta)
+Deploy (ha lehet quick deploy - noTestRun)
+
+Ejfelkor full deploy
+
+Test:
+PR-ra ugyanugy approve kell
+Dev-bol fogadjon csak PR-t ha lehet
+Validacio osszes teszt futassal
+Utana Approve
+Deploy (noTestRunnal)
+
+master:
+csak a testbol
+teljes validacio
+itt is approve
+teljes deploy (noTestRun, itt ugyis lefog futni valoszinuleg mert ez a prod)
+
+
 -if deployment successful -> merge code into git
 
 Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
