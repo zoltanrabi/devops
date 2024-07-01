@@ -7,5 +7,5 @@ public class ContactNotifier {
         email.setPlainTextBody(message);
         email.setSaveAsActivity(false);
         Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
-    }
+    }  
 }  
