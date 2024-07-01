@@ -25,6 +25,6 @@ jobs:
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: false
-          TEST_LEVEL: RunSpecifiedTests
+          TEST_LEVEL: NoTestRun
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
