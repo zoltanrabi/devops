@@ -31,33 +31,43 @@ def list_apex_classes(package_xml_path, classes_folder_path):
                         test_classes.add(apex_class_name + 'Test')
     return test_classes
 
-def collect_flow_related_objects(flow_folder):
-    related_objects = set()
+def get_flows_from_package(package_xml_path):
+    flows = set()
+    try:
+        tree = ET.parse(package_xml_path)
+        root = tree.getroot()
+        ns = {'pkg': 'http://soap.sforce.com/2006/04/metadata'}
+        
+        for types in root.findall('pkg:types', namespaces=ns):
+            name = types.find('pkg:name', namespaces=ns)
+            if name is not None and name.text == 'Flow':
+                for member in types.findall('pkg:members', namespaces=ns):
+                    flows.add(member.text)
+    except ET.ParseError as e:
+        print(f"Error parsing {package_xml_path}: {e}")
+    
+    return flows
 
-    # Iterate through files in the specified folder
-    for filename in os.listdir(flow_folder):
-        if filename.endswith(".xml"):  # Process only .xml files
-            file_path = os.path.join(flow_folder, filename)
+def collect_flow_related_objects(flow_folder, flow_names):
+    related_objects = set()
+    
+    for flow_name in flow_names:
+        file_path = os.path.join(flow_folder, f"{flow_name}.xml")
+        if os.path.exists(file_path):
             try:
                 tree = ET.parse(file_path)
                 root = tree.getroot()
-
-                # Find the Flow element using the Salesforce metadata namespace
                 ns = {'md': 'http://soap.sforce.com/2006/04/metadata'}
-                flow_element = root.find('md:Flow', namespaces=ns)
-
-                if flow_element is not None:
-                    # Check if the flow is triggered by a record with the correct triggerType
-                    start_element = flow_element.find('md:start', namespaces=ns)
-                    if start_element is not None and start_element.find('md:object', namespaces=ns) is not None:
-                        trigger_type = start_element.find('md:triggerType', namespaces=ns)
-                        if trigger_type is not None and trigger_type.text in ['RecordAfterSave', 'RecordBeforeDelete', 'RecordBeforeSave']:
-                            object_name = start_element.find('md:object', namespaces=ns).text
-                            related_objects.add(object_name)
-
+                start_element = root.find('md:start', namespaces=ns)
+                
+                if start_element is not None and start_element.find('md:object', namespaces=ns) is not None:
+                    trigger_type = start_element.find('md:triggerType', namespaces=ns)
+                    if trigger_type is not None and trigger_type.text in ['RecordAfterSave', 'RecordBeforeDelete', 'RecordBeforeSave']:
+                        object_name = start_element.find('md:object', namespaces=ns).text
+                        related_objects.add(object_name)
             except ET.ParseError as e:
                 print(f"Error parsing {file_path}: {e}")
-
+    
     return related_objects
 
 def find_test_classes(classes_folder, related_objects):
@@ -75,6 +85,7 @@ def find_test_classes(classes_folder, related_objects):
     return test_classes
 
 test_classes = list_apex_classes(package_xml_path, classes_folder_path)
-related_objects = collect_flow_related_objects(flow_folder_path)
+flow_names = get_flows_from_package(package_xml_path)
+related_objects = collect_flow_related_objects(flow_folder_path, flow_names)
 test_classes.update(find_test_classes(classes_folder_path, related_objects))
 print(' '.join(test_classes))
