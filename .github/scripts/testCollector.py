@@ -52,7 +52,7 @@ def collect_flow_related_objects(flow_folder, flow_names):
     related_objects = set()
     
     for flow_name in flow_names:
-        file_path = os.path.join(flow_folder, f"{flow_name}.xml")
+        file_path = os.path.join(flow_folder, f"{flow_name}.flow-meta.xml")
         if os.path.exists(file_path):
             try:
                 tree = ET.parse(file_path)
