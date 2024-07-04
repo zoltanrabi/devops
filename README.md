@@ -29,6 +29,26 @@ teljes validacio
 itt is approve
 teljes deploy (noTestRun, itt ugyis lefog futni valoszinuleg mert ez a prod)
 
+Rectrict PR-s for branches(github setting or workflow):
+
+Restrict who can push to matching branches
+https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
+
+name: 'Check Branch'
+
+on:
+  pull_request:
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch
+        if: github.base_ref == 'main' && github.head_ref != 'dev'
+        run: |
+          echo "ERROR: You can only merge to main from dev."
+          exit 1
+
 
 -if deployment successful -> merge code into git
 
