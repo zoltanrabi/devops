@@ -1,4 +1,4 @@
-name: "Merge"
+name: "Merge to Test"
 
 on:
   workflow_run:
