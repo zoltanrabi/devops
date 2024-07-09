@@ -31,7 +31,7 @@ jobs:
 
       - name: Deploy changes to target branch
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' }}
-        uses: ./.github/actions/sf-deploy
+        uses: ./.github/actions/sf-deploy-full
         with:
           DRY_RUN: false
           TEST_LEVEL: NoTestRun

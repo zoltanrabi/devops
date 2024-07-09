@@ -60,7 +60,7 @@ runs:
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
           TESTS=$(python ./.github/scripts/testCollector.py)
           echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
-          echo "The following test were specified to run:" $TESTS
+          echo "The following tests were specified to run:" $TESTS
         fi
     - name: Deploy to Environment
       shell: bash
@@ -87,3 +87,18 @@ runs:
           deployFlags+=( --dry-run )
         fi
         sf project deploy start "${deployFlags[@]}"
+    - name: Capture Deployment ID
+      id: get-deploy-id
+      run: echo "$(sfdx force:source:deploy:report --json | jq -r .result.id)" > ${{ github.event.pull_request.number }}.txt
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ github.event.pull_request.number }}
+        path: ${{ github.event.pull_request.number }}.txt
+
+    - name: Quick Deploy
+      if: ${{ inputs.TEST_LEVEL == 'NoTestRun' }}
+      run: |
+        DEPLOY_ID=$(cat ${{ github.event.pull_request.number }}.txt)
+        sfdx force:source:deploy --validateddeployrequestid $DEPLOY_ID --targetusername my-org --wait 10
