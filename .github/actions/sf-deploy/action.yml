@@ -93,6 +93,10 @@ runs:
       run: |
         echo "::set-output name=deploy-id::$(sfdx force:source:deploy:report --json | jq -r .result.id)"
 
+    - name: Generate variable
+      shell: bash
+      run: echo "${{ github.event.pull_request.number }}=${{ steps.get-deploy-id.outputs.deploy-id }}" > ${{ github.event.pull_request.number }}.txt
+
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
