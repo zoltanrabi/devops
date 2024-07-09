@@ -1,0 +1,39 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - test
+      - prod
+    paths:
+      - 'force-app/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set SFDX Auth URL and Test Level
+        run: |
+          if [ "${{ github.head_ref }}" == "dev" ]; then
+            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunSpecifiedTests" >> $GITHUB_ENV
+          elif [ "${{ github.head_ref }}" == "test" ]; then
+            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
+          elif [ "${{ github.head_ref }}" == "prod" ]; then
+            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
+          fi
+
+      - name: Run tests for modified Apex components
+        uses: ./.github/actions/sf-deploy
+        with:
+          DRY_RUN: true  # or false, depending on your needs
+          TEST_LEVEL: ${{ env.TEST_LEVEL }}
+          WAIT: 30
+          SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
