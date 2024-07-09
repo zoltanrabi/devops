@@ -99,7 +99,6 @@ runs:
         fi
         echo "DEPLOY_ID: $DEPLOY_ID"
         echo "deploy-id=$DEPLOY_ID" >> $GITHUB_ENV
-        echo "::set-output name=deploy-id::$DEPLOY_ID"
 
     - name: Generate variable
       shell: bash
