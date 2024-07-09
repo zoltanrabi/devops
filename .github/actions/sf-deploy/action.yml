@@ -87,7 +87,7 @@ runs:
           deployFlags+=( --dry-run )
         fi
         sf project deploy start "${deployFlags[@]}"
-- name: Capture Deployment ID
+    - name: Capture Deployment ID
       shell: bash
       id: get-deploy-id
       run: |
