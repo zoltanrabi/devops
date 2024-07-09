@@ -15,7 +15,7 @@ async function run() {
       pull_number: pr.number
     });
 
-    const requiredApprovers = pr.requested_reviewers.map(reviewer => reviewer.login);
+    const requiredApprovers = pr.requested_reviewers.map(reviewer => review.user.login);
     const approvedReviewers = reviewsResponse.data.filter(review => review.state === 'APPROVED').map(review => review.user.login);
 
     const allApproved = requiredApprovers.every(reviewer => approvedReviewers.includes(reviewer));
