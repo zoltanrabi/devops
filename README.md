@@ -54,6 +54,16 @@ jobs:
 
 Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
 
+#Kiszedni orgbol a Quick deploy ID-t? kilehet-e
+Generikussa tenni a deploy workflowkat (eleg 1 is nem kell minden btacnhre/orgra)
+Action ful alatt elnevezesek
+
+1.Delta validacio specifikus tesztekkel 
+2.Delta bevetes tesztek nelkul
+3.Teljes bevetes tesztekkel (napi 1)
+4.Validacio teljes tesztekkel
+5.Gyors bevetes, ha ezt nem lehet mert eles (3 es 5 osszevonhato?)
+
 ## How Do You Plan to Deploy Your Changes?
 
 Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
