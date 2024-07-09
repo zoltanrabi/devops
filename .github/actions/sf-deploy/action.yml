@@ -88,10 +88,12 @@ runs:
         fi
         sf project deploy start "${deployFlags[@]}"
     - name: Capture Deployment ID
-      shell: bash
       id: get-deploy-id
+      shell: bash
       run: |
-        echo "::set-output name=deploy-id::$(sfdx force:source:deploy:report --json | jq -r .result.id)"
+        DEPLOY_ID=$(sfdx force:source:deploy:report --json | jq -r .result.id)
+        echo "deploy-id=$DEPLOY_ID" >> $GITHUB_ENV
+        echo "::set-output name=deploy-id::$DEPLOY_ID"
 
     - name: Generate variable
       shell: bash
