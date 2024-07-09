@@ -88,6 +88,7 @@ runs:
         fi
         sf project deploy start "${deployFlags[@]}"
     - name: Capture Deployment ID
+      shell: bash
       id: get-deploy-id
       run: |
         echo "Running sfdx force:source:deploy:report"
