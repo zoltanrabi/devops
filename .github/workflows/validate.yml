@@ -1,39 +1,39 @@
-name: Deploy To Dev
+name: Validate Pull Request
 
 on:
-  pull_request_review:
-    types:
-      - submitted
+  pull_request:
+    branches:
+      - dev
+      - test
+      - prod
+    paths:
+      - 'force-app/**'
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Check Approvals and Workflow Status
-        id: check_approvals_status
-        uses: ./.github/actions/check-approvals
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set SFDX Auth URL
+      - name: Set SFDX Auth URL and Test Level
         run: |
           if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunSpecifiedTests" >> $GITHUB_ENV
           elif [ "${{ github.event.pull_request.base.ref }}" == "test" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
           elif [ "${{ github.event.pull_request.base.ref }}" == "prod" ]; then
-            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_PROD }}" >> $GITHUB_ENV
+            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
           fi
 
       - name: Run tests for modified Apex components
-        if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' }}
         uses: ./.github/actions/sf-deploy
         with:
-          DRY_RUN: false
-          TEST_LEVEL: NoTestRun
+          DRY_RUN: true  # or false, depending on your needs
+          TEST_LEVEL: ${{ env.TEST_LEVEL }}
           WAIT: 30
           SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
