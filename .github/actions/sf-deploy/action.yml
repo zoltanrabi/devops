@@ -91,14 +91,20 @@ runs:
       shell: bash
       id: get-deploy-id
       run: |
-        DEPLOY_ID=$(sfdx force:source:deploy:report --json | jq -r .result[0].id)
+        echo "Running sfdx force:source:deploy:report --json"
+        REPORT_JSON=$(sfdx force:source:deploy:report --json)
+        echo "Full JSON output: $REPORT_JSON"
+        DEPLOY_ID=$(echo "$REPORT_JSON" | jq -r '.result[0].id')
+
         if [ -z "$DEPLOY_ID" ]; then
-          echo "Error: Deployment ID is empty"
-          sfdx force:source:deploy:report --json
+          echo "Error: Deployment ID is empty or the report command failed"
+          echo "JSON output for debugging: $REPORT_JSON"
           exit 1
         fi
+
         echo "DEPLOY_ID: $DEPLOY_ID"
         echo "deploy-id=$DEPLOY_ID" >> $GITHUB_ENV
+        echo "::set-output name=deploy-id::$DEPLOY_ID"
 
     - name: Generate variable
       shell: bash
