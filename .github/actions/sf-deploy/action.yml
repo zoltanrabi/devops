@@ -88,16 +88,19 @@ runs:
         fi
         sf project deploy start "${deployFlags[@]}"
     - name: Capture Deployment ID
+      shell: bash
       id: get-deploy-id
       run: echo "$(sfdx force:source:deploy:report --json | jq -r .result.id)" > ${{ github.event.pull_request.number }}.txt
 
     - name: Upload artifact
+      shell: bash
       uses: actions/upload-artifact@v2
       with:
         name: ${{ github.event.pull_request.number }}
         path: ${{ github.event.pull_request.number }}.txt
 
     - name: Quick Deploy
+      shell: bash
       if: ${{ inputs.TEST_LEVEL == 'NoTestRun' }}
       run: |
         DEPLOY_ID=$(cat ${{ github.event.pull_request.number }}.txt)
