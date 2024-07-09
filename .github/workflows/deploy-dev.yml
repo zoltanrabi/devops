@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'dev'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,8 +19,19 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-
       # Run tests for modified Apex components
+      - name: Set SFDX Auth URL for Dev
+        if: github.event.pull_request.base.ref == 'dev'
+        run: echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
+
+      - name: Set SFDX Auth URL for Test
+        if: github.event.pull_request.base.ref == 'test'
+        run: echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
+
+      - name: Set SFDX Auth URL for Prod
+        if: github.event.pull_request.base.ref == 'prod'
+        run: echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_PROD }}" >> $GITHUB_ENV
+
       - name: Run tests for modified Apex components
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' }}
         uses: ./.github/actions/sf-deploy
@@ -29,4 +39,4 @@ jobs:
           DRY_RUN: false  # or false, depending on your needs
           TEST_LEVEL: NoTestRun
           WAIT: 30
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}
+          SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
