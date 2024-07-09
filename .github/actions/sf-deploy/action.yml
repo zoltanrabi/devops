@@ -88,12 +88,18 @@ runs:
         fi
         sf project deploy start "${deployFlags[@]}"
     - name: Capture Deployment ID
-      id: get-deploy-id
       shell: bash
+      id: get-deploy-id
       run: |
-        DEPLOY_ID=$(sfdx force:source:deploy:report --json | jq -r .result.id)
+        DEPLOY_ID=$(sfdx force:source:deploy:report --json | jq -r .result[0].id)
+        if [ -z "$DEPLOY_ID" ]; then
+          echo "Error: Deployment ID is empty"
+          sfdx force:source:deploy:report --json
+          exit 1
+        fi
+        echo "DEPLOY_ID: $DEPLOY_ID"
         echo "deploy-id=$DEPLOY_ID" >> $GITHUB_ENV
-        echo "DeploymentID:" $DEPLOY_ID
+        echo "::set-output name=deploy-id::$DEPLOY_ID"
 
     - name: Generate variable
       shell: bash
