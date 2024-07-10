@@ -91,5 +91,5 @@ runs:
       shell: bash
       id: get-deploy-id
       run: |
-        REPORT_JSON=$(sf project deploy report)
+        REPORT_JSON=$(sf project deploy report --target-org "${{ inputs.SFDX_AUTH_URL }}")
         echo "Full JSON output: $REPORT_JSON"
