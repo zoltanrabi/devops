@@ -92,12 +92,13 @@ runs:
       id: get-deploy-id
       run: |
         DEPLOY_ID=$(sf project deploy report --use-most-recent --json | jq -r .result.id)
-        echo "DEPLOY_ID: $DEPLOY_ID"
-        echo "DEPLOY_ID_ENV=$DEPLOY_ID" >> $GITHUB_ENV
+        TRUNCATED_DEPLOY_ID=${DEPLOY_ID::-3}
+        echo "Quick deploy ID: $TRUNCATED_DEPLOY_ID"
+        echo "QUICK_DEPLOY_ID=$TRUNCATED_DEPLOY_ID" >> $GITHUB_ENV
 
     - name: Generate variable
       shell: bash
-      run: echo "$DEPLOY_ID_ENV" > ${{ github.event.pull_request.number }}.txt
+      run: echo "$QUICK_DEPLOY_ID" > ${{ github.event.pull_request.number }}.txt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
