@@ -126,4 +126,4 @@ runs:
       shell: bash
       run: |
         echo "test quick deploy"
-        sf project deploy pipeline quick --job-id $ID_FOR_QUICK_DEPLOY --wait 10
+        sf project deploy quick --job-id $ID_FOR_QUICK_DEPLOY --wait 10
