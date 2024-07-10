@@ -91,7 +91,9 @@ runs:
       shell: bash
       id: get-deploy-id
       run: |
-        DEPLOY_ID="$(sf project deploy report --use-most-recent --json | jq -r .result.id)"
+        DEPLOY_ID=$(sf project deploy report --use-most-recent --json | jq -r .result.id)
+        echo "DEPLOY_ID: $DEPLOY_ID"
+        echo "deploy-id=$DEPLOY_ID" >> $GITHUB_ENV
 
     - name: Generate variable
       shell: bash
