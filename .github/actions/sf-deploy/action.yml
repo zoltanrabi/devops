@@ -112,6 +112,7 @@ runs:
         path: ./artifact
  
     - name: Read variable
+      shell: bash
       run: |
         DEPLOYMENT_ID=$(cat ./artifact/${{ github.event.pull_request.number }}.txt)
         echo "Setting the ID_FOR_QUICK_DEPLOY environment variable..."
