@@ -97,7 +97,7 @@ runs:
 
     - name: Generate variable
       shell: bash
-      run: echo "${{ github.event.pull_request.number }}=$DEPLOY_ID" > ${{ github.event.pull_request.number }}.txt
+      run: echo "${{ steps.get-deploy-id.outputs.deploy-id }}" > ${{ github.event.pull_request.number }}.txt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
