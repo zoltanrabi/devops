@@ -52,24 +52,24 @@ runs:
         fi
         sf project deploy start "${deployFlags[@]}"
 
-      - name: Download artifact
-        if: ${{ inputs.TEST_LEVEL == 'NoTest' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: deployment-id-for-PR${{ github.event.pull_request.number }}
-          path: ./artifact
+    - name: Download artifact
+      if: ${{ inputs.TEST_LEVEL == 'NoTest' }}
+      uses: actions/download-artifact@v4
+      with:
+        name: deployment-id-for-PR${{ github.event.pull_request.number }}
+        path: ./artifact
 
-      - name: Read variable
-        if: ${{ inputs.TEST_LEVEL == 'NoTest' }}
-        shell: bash
-        run: |
-          DEPLOYMENT_ID=$(cat ./artifact/${{ github.event.pull_request.number }}.txt)
-          echo "Setting the ID_FOR_QUICK_DEPLOY environment variable..."
-          echo "ID_FOR_QUICK_DEPLOY=$DEPLOYMENT_ID" >> $GITHUB_ENV
+    - name: Read variable
+      if: ${{ inputs.TEST_LEVEL == 'NoTest' }}
+      shell: bash
+      run: |
+        DEPLOYMENT_ID=$(cat ./artifact/${{ github.event.pull_request.number }}.txt)
+        echo "Setting the ID_FOR_QUICK_DEPLOY environment variable..."
+        echo "ID_FOR_QUICK_DEPLOY=$DEPLOYMENT_ID" >> $GITHUB_ENV
 
-      - name: Quick Deploy
-        if: ${{ inputs.TEST_LEVEL == 'NoTest' }}
-        shell: bash
-        run: |
-          echo "test quick deploy"
-          sf project deploy quick --job-id $ID_FOR_QUICK_DEPLOY --wait 10
+    - name: Quick Deploy
+      if: ${{ inputs.TEST_LEVEL == 'NoTest' }}
+      shell: bash
+      run: |
+        echo "test quick deploy"
+        sf project deploy quick --job-id $ID_FOR_QUICK_DEPLOY --wait 10
