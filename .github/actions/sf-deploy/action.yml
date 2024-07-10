@@ -105,25 +105,3 @@ runs:
       with:
         name: deployment-id-for-PR${{ github.event.pull_request.number }}
         path: "${{ github.event.pull_request.number }}.txt"
-
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: deployment-id-for-PR${{ github.event.pull_request.number }}
-        path: ./artifact
- 
-    - name: Read variable
-      shell: bash
-      run: |
-        DEPLOYMENT_ID=$(cat ./artifact/${{ github.event.pull_request.number }}.txt)
-        echo "Setting the ID_FOR_QUICK_DEPLOY environment variable..."
-        echo "ID_FOR_QUICK_DEPLOY=$DEPLOYMENT_ID" >> $GITHUB_ENV
-        echo "mivan"
-        echo "an   $ID_FOR_QUICK_DEPLOY"
-
-    - name: Quick Deploy
-
-      shell: bash
-      run: |
-        echo "test quick deploy"
-        sf project deploy quick --job-id $ID_FOR_QUICK_DEPLOY --wait 10
