@@ -123,4 +123,4 @@ runs:
       if: ${{ inputs.TEST_LEVEL == 'NoTestRun' && inputs.DRY_RUN != 'true' }}
       shell: bash
       run: |
-        sfdx force:source:deploy --validateddeployrequestid "${ID_FOR_QUICK_DEPLOY}" --wait 10
+        sf project deploy pipeline quick --job-id ${ID_FOR_QUICK_DEPLOY} --wait 10
