@@ -118,7 +118,8 @@ runs:
         DEPLOYMENT_ID=$(cat ./artifact/${{ github.event.pull_request.number }}.txt)
         echo "Setting the ID_FOR_QUICK_DEPLOY environment variable..."
         echo "ID_FOR_QUICK_DEPLOY=$DEPLOYMENT_ID" >> $GITHUB_ENV
-        echo "$ID_FOR_QUICK_DEPLOY"
+        echo "mivan"
+        echo "an   $ID_FOR_QUICK_DEPLOY"
 
     - name: Quick Deploy
       if: ${{ inputs.TEST_LEVEL == 'NoTestRun' && inputs.DRY_RUN != 'true' }}
