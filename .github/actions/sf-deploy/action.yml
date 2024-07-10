@@ -93,11 +93,11 @@ runs:
       run: |
         DEPLOY_ID=$(sf project deploy report --use-most-recent --json | jq -r .result.id)
         echo "DEPLOY_ID: $DEPLOY_ID"
-        echo "deploy-id=$DEPLOY_ID" >> $GITHUB_ENV
+        echo "DEPLOY_ID_ENV=$DEPLOY_ID" >> $GITHUB_ENV
 
     - name: Generate variable
       shell: bash
-      run: echo "${{ steps.get-deploy-id.outputs.deploy-id }}" > ${{ github.event.pull_request.number }}.txt
+      run: echo "$DEPLOY_ID_ENV" > ${{ github.event.pull_request.number }}.txt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
@@ -109,4 +109,4 @@ runs:
       if: ${{ inputs.TEST_LEVEL == 'NoTestRun' && inputs.DRY_RUN != 'true' }}
       shell: bash
       run: |
-        sfdx force:source:deploy --validateddeployrequestid "${DEPLOY_ID}" --targetusername my-org --wait 10
+        sfdx force:source:deploy --validateddeployrequestid "${DEPLOY_ID_ENV}" --targetusername my-org --wait 10
