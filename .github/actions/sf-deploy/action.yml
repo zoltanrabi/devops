@@ -91,7 +91,7 @@ runs:
       shell: bash
       id: get-deploy-id
       run: |
-        DEPLOY_ID="${{ sf project deploy report --use-most-recent --json | jq -r .result.id }}"
+        DEPLOY_ID="$(sf project deploy report --use-most-recent --json | jq -r .result.id)"
 
     - name: Generate variable
       shell: bash
@@ -107,5 +107,4 @@ runs:
       if: ${{ inputs.TEST_LEVEL == 'NoTestRun' && inputs.DRY_RUN != 'true' }}
       shell: bash
       run: |
-        DEPLOY_ID=$(cat "${{ github.event.pull_request.number }}.txt")
         sfdx force:source:deploy --validateddeployrequestid "${DEPLOY_ID}" --targetusername my-org --wait 10
