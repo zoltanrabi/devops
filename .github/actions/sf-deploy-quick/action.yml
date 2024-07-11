@@ -42,6 +42,8 @@ runs:
       shell: bash
       id: get-deploy-id
       run: |
+        DEPLOY_REPORT=$(sf project deploy report --use-most-recent --json)
+        echo "Deployment Report: $DEPLOY_REPORT"
         DEPLOY_ID=$(sf project deploy report --use-most-recent --json | jq -r .result.id)
         TRUNCATED_DEPLOY_ID=${DEPLOY_ID::-3}
         echo "Quick deploy ID: $TRUNCATED_DEPLOY_ID"
