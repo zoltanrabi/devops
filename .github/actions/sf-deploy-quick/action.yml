@@ -43,7 +43,7 @@ runs:
       id: get-deploy-id
       run: |
         echo "Querying the latest deployment ID..."
-        QUERY_RESULT=$(sf data query --query "SELECT Id FROM DeployRequest ORDER BY CreatedDate DESC LIMIT 1" --json)
+        QUERY_RESULT=$(sf data query --query "SELECT Id FROM DeployRequest ORDER BY CreatedDate DESC LIMIT 1" --json --use-tooling-api)
         echo "Query Result: $QUERY_RESULT"
         DEPLOY_ID=$(echo $QUERY_RESULT | jq -r '.result.records[0].Id')
         if [ -z "$DEPLOY_ID" ]; then
