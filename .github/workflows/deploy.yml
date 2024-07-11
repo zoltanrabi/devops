@@ -19,22 +19,31 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set SFDX Auth URL
+      - name: Set Environment Variables
         run: |
           if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
-            echo "DEPLOY_ACTION=sf-deploy-full" >> $GITHUB_ENV
+            echo "QUICK_DEPLOY=false" >> $GITHUB_ENV
           elif [ "${{ github.event.pull_request.base.ref }}" == "test" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
-            echo "DEPLOY_ACTION=sf-deploy-full" >> $GITHUB_ENV
+            echo "QUICK_DEPLOY=false" >> $GITHUB_ENV
           elif [ "${{ github.event.pull_request.base.ref }}" == "main" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL }}" >> $GITHUB_ENV
-            echo "DEPLOY_ACTION=sf-deploy-quick" >> $GITHUB_ENV
+            echo "QUICK_DEPLOY=true" >> $GITHUB_ENV
           fi
 
-      - name: Deploy changes to target branch
-        if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' }}
-        uses: .github/actions/${{ env.DEPLOY_ACTION }}
+      - name: Deploy changes to target branch (full)
+        if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.QUICK_DEPLOY == 'false' }}
+        uses: ./.github/actions/sf-deploy-full
+        with:
+          DRY_RUN: false
+          TEST_LEVEL: NoTestRun
+          WAIT: 30
+          SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
+
+      - name: Deploy changes to target branch (quick)
+        if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.QUICK_DEPLOY == 'true' }}
+        uses: ./.github/actions/sf-deploy-quick
         with:
           DRY_RUN: false
           TEST_LEVEL: NoTestRun
