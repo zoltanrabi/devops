@@ -21,17 +21,13 @@ jobs:
 
       - name: Set SFDX Auth URL
         run: |
-          if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
-            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
-          elif [ "${{ github.event.pull_request.base.ref }}" == "test" ]; then
-            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
-          elif [ "${{ github.event.pull_request.base.ref }}" == "main" ]; then
+          if [ "${{ github.event.pull_request.base.ref }}" == "main" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL }}" >> $GITHUB_ENV
           fi
 
       - name: Deploy changes to target branch
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' }}
-        uses: ./.github/actions/sf-deploy-full
+        uses: ./.github/actions/sf-deploy-quick
         with:
           DRY_RUN: false
           TEST_LEVEL: NoTestRun

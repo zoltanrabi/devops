@@ -38,15 +38,17 @@ runs:
       shell: bash
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
-    - name: Deploy to Environment
+    - name: Capture Deployment ID
+      shell: bash
+      id: get-deploy-id
+      run: |
+        DEPLOY_ID=$(sf project deploy report --use-most-recent --json | jq -r .result.id)
+        TRUNCATED_DEPLOY_ID=${DEPLOY_ID::-3}
+        echo "Quick deploy ID: $TRUNCATED_DEPLOY_ID"
+        echo "QUICK_DEPLOY_ID=$TRUNCATED_DEPLOY_ID" >> $GITHUB_ENV
+
+    - name: Quick Deploy
       shell: bash
       run: |
-        deployFlags=(
-            --source-dir force-app
-            --wait ${{ inputs.WAIT }}
-            --test-level ${{ inputs.TEST_LEVEL }}
-        )
-        if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
-          deployFlags+=( --dry-run )
-        fi
-        sf project deploy start "${deployFlags[@]}"
+        echo "quick deploy"
+        sf project deploy quick --job-id $QUICK_DEPLOY_ID --wait 10
