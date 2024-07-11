@@ -39,7 +39,6 @@ runs:
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
     - name: Deploy to Environment
-      if: ${{ inputs.TEST_LEVEL != 'NoTestRun' }}
       shell: bash
       run: |
         deployFlags=(
@@ -51,25 +50,3 @@ runs:
           deployFlags+=( --dry-run )
         fi
         sf project deploy start "${deployFlags[@]}"
-
-    - name: Download artifact
-      if: ${{ inputs.TEST_LEVEL == 'NoTestRun' }}
-      uses: actions/download-artifact@v4
-      with:
-        name: deployment-id-for-PR${{ github.event.pull_request.number }}
-        path: ./artifact
-
-    - name: Read variable
-      if: ${{ inputs.TEST_LEVEL == 'NoTestRun' }}
-      shell: bash
-      run: |
-        DEPLOYMENT_ID=$(cat ./artifact/${{ github.event.pull_request.number }}.txt)
-        echo "Setting the ID_FOR_QUICK_DEPLOY environment variable..."
-        echo "ID_FOR_QUICK_DEPLOY=$DEPLOYMENT_ID" >> $GITHUB_ENV
-
-    - name: Quick Deploy
-      if: ${{ inputs.TEST_LEVEL == 'NoTestRun' }}
-      shell: bash
-      run: |
-        echo "test quick deploy"
-        sf project deploy quick --job-id $ID_FOR_QUICK_DEPLOY --wait 10
