@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -32,7 +32,7 @@ jobs:
             echo "DEPLOY_TYPE=QUICK" >> $GITHUB_ENV
           fi
 
-      - name: Deploy changes to target branch (delta)
+      - name: Deploy to target org (DELTA)
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.DEPLOY_TYPE == 'DELTA' }}
         uses: ./.github/actions/sf-deploy
         with:
@@ -42,7 +42,7 @@ jobs:
           SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
           DEPLOY_TYPE: ${{ env.DEPLOY_TYPE }}
 
-      - name: Deploy changes to target branch (full)
+      - name: Deploy to target org (FULL)
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.DEPLOY_TYPE == 'FULL' }}
         uses: ./.github/actions/sf-deploy-full
         with:
@@ -51,7 +51,7 @@ jobs:
           WAIT: 30
           SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
 
-      - name: Deploy changes to target branch (quick)
+      - name: Deploy to target org (QUICK)
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.DEPLOY_TYPE == 'QUICK' }}
         uses: ./.github/actions/sf-deploy-quick
         with:
