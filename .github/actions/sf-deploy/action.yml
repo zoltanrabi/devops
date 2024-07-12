@@ -26,6 +26,9 @@ inputs:
     description: "The auth url tied to your deployment environment"
     type: string
     required: true
+  DELTA:
+    description: "Validate only delta package"
+    type: boolean
 
 runs:
   using: "composite"
@@ -35,16 +38,20 @@ runs:
       run: |
         npm install -g @salesforce/cli
         echo y | sf plugins:install sfdx-git-delta  
+
     - name: Login to Environment
       shell: bash
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
+
     - name: Fetch branches
       shell: bash
       run: |
         git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
         git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
+
     - name: Generate package.xml
+      if: "${{ inputs.DELTA }}" == "true"
       shell: bash
       run: |
         BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
@@ -54,22 +61,30 @@ runs:
         cat package/package.xml
         echo -e "\nDestructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
+
     - name: Collect test classes
+      if: "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests"
       shell: bash
       run: |
-        if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" ]]; then
-          TESTS=$(python ./.github/scripts/testCollector.py)
-          echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
-          echo "The following tests were specified to run:" $TESTS
-        fi
-    - name: Deploy to Environment
+        TESTS=$(python ./.github/scripts/testCollector.py)
+        echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
+        echo "The following tests were specified to run:" $TESTS
+
+    - name: Validate Deployment to Environment
       shell: bash
       run: |
         deployFlags=(
-            --manifest package/package.xml
-            --post-destructive-changes destructiveChanges/destructiveChanges.xml
             --wait ${{ inputs.WAIT }}
         )
+        if [[ "${{ inputs.DELTA }}" == "true" ]]; then
+          deployFlags+=( --manifest package/package.xml }} )
+          deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
+          echo "Test runs in the following mode: RunSpecifiedTests"
+        fi
+        if [[ "${{ inputs.DELTA }}" == "false" ]]; then
+          deployFlags+=( --source-dir force-app }} )
+          echo "Test runs in the following mode: RunSpecifiedTests"
+        fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
           deployFlags+=( --tests $TEST_LIST )
