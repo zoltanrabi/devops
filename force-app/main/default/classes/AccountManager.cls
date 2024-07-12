@@ -14,4 +14,4 @@ public class AccountManager {
         Account acc = [SELECT Id FROM Account WHERE Id = :accountId];
         delete acc;
     }
-}   
+}
