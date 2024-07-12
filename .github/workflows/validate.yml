@@ -34,7 +34,6 @@ jobs:
           fi
 
       - name: Validate Delta
-        if: ${{ env.DEPLOY_TYPE == 'DELTA' }}
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: true
