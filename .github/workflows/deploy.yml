@@ -40,6 +40,7 @@ jobs:
           TEST_LEVEL: NoTestRun
           WAIT: 30
           SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
+          DEPLOY_TYPE: ${{ env.DEPLOY_TYPE }}
 
       - name: Deploy changes to target branch (full)
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.DEPLOY_TYPE == 'FULL' }}
