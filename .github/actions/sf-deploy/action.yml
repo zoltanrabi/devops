@@ -28,7 +28,7 @@ inputs:
     required: true
   DEPLOY_TYPE:
     description: "Validate only delta package or full"
-    type: boolean
+    type: string
 
 runs:
   using: "composite"
