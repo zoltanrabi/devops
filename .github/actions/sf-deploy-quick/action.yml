@@ -38,11 +38,18 @@ runs:
       shell: bash
       run: |
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
-    - name: Capture Deployment ID
+    - name: Query Latest Deployment ID
       shell: bash
       id: get-deploy-id
       run: |
-        DEPLOY_ID=$(sf project deploy report --use-most-recent --json | jq -r .result.id)
+        echo "Querying the latest deployment ID..."
+        QUERY_RESULT=$(sf data query --query "SELECT Id FROM DeployRequest ORDER BY CreatedDate DESC LIMIT 1" --json --use-tooling-api)
+        echo "Query Result: $QUERY_RESULT"
+        DEPLOY_ID=$(echo $QUERY_RESULT | jq -r '.result.records[0].Id')
+        if [ -z "$DEPLOY_ID" ]; then
+          echo "Error: Unable to fetch the latest deployment ID."
+          exit 1
+        fi
         TRUNCATED_DEPLOY_ID=${DEPLOY_ID::-3}
         echo "Quick deploy ID: $TRUNCATED_DEPLOY_ID"
         echo "QUICK_DEPLOY_ID=$TRUNCATED_DEPLOY_ID" >> $GITHUB_ENV
@@ -50,5 +57,5 @@ runs:
     - name: Quick Deploy
       shell: bash
       run: |
-        echo "quick deploy"
+        echo "Performing quick deploy"
         sf project deploy quick --job-id $QUICK_DEPLOY_ID --wait 10
