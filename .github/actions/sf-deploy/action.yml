@@ -26,8 +26,8 @@ inputs:
     description: "The auth url tied to your deployment environment"
     type: string
     required: true
-  DELTA:
-    description: "Validate only delta package"
+  DEPLOY_TYPE:
+    description: "Validate only delta package or full"
     type: boolean
 
 runs:
@@ -51,7 +51,7 @@ runs:
         git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
 
     - name: Generate package.xml
-      if: ${{ inputs.DELTA }}
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' }}
       shell: bash
       run: |
         BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
@@ -76,14 +76,13 @@ runs:
         deployFlags=(
             --wait ${{ inputs.WAIT }}
         )
-        if [[ "${{ inputs.DELTA }}" == "true" ]]; then
+        if [[ "${{ inputs.DEPLOY_TYPE }}" == "DELTA" ]]; then
           deployFlags+=( --manifest package/package.xml )
           deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
           echo "Test runs in the following mode: RunSpecifiedTests"
         fi
-        if [[ "${{ inputs.DELTA }}" == "false" ]]; then
+        if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
           deployFlags+=( --source-dir force-app )
-          echo "Test runs in the following mode: RunSpecifiedTests"
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
