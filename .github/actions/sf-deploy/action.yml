@@ -26,9 +26,9 @@ inputs:
     description: "The auth url tied to your deployment environment"
     type: string
     required: true
-  DELTA:
-    description: "Validate only delta package"
-    type: boolean
+  DEPLOY_TYPE:
+    description: "Validate only delta package or full"
+    type: string
 
 runs:
   using: "composite"
@@ -51,7 +51,7 @@ runs:
         git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
 
     - name: Generate package.xml
-      if: "${{ inputs.DELTA }}" == "true"
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' }}
       shell: bash
       run: |
         BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
@@ -63,7 +63,7 @@ runs:
         cat destructiveChanges/destructiveChanges.xml
 
     - name: Collect test classes
-      if: "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests"
+      if: ${{ inputs.TEST_LEVEL == 'RunSpecifiedTests' }}
       shell: bash
       run: |
         TESTS=$(python ./.github/scripts/testCollector.py)
@@ -76,14 +76,13 @@ runs:
         deployFlags=(
             --wait ${{ inputs.WAIT }}
         )
-        if [[ "${{ inputs.DELTA }}" == "true" ]]; then
-          deployFlags+=( --manifest package/package.xml }} )
+        if [[ "${{ inputs.DEPLOY_TYPE }}" == "DELTA" ]]; then
+          deployFlags+=( --manifest package/package.xml )
           deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
           echo "Test runs in the following mode: RunSpecifiedTests"
         fi
-        if [[ "${{ inputs.DELTA }}" == "false" ]]; then
-          deployFlags+=( --source-dir force-app }} )
-          echo "Test runs in the following mode: RunSpecifiedTests"
+        if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
+          deployFlags+=( --source-dir force-app )
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )

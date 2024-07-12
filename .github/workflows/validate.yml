@@ -22,22 +22,22 @@ jobs:
           if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
             echo "TEST_LEVEL=RunSpecifiedTests" >> $GITHUB_ENV
-            echo "DELTA=true" >> $GITHUB_ENV
+            echo "DEPLOY_TYPE=DELTA" >> $GITHUB_ENV
           elif [ "${{ github.event.pull_request.base.ref }}" == "test" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
             echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
-            echo "DELTA=false" >> $GITHUB_ENV
+            echo "DEPLOY_TYPE=FULL" >> $GITHUB_ENV
           elif [ "${{ github.event.pull_request.base.ref }}" == "main" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL }}" >> $GITHUB_ENV
             echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
-            echo "DELTA=false" >> $GITHUB_ENV
+            echo "DEPLOY_TYPE=FULL" >> $GITHUB_ENV
           fi
 
-      - name: Validate Delta
+      - name: Validate
         uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: true
           TEST_LEVEL: ${{ env.TEST_LEVEL }}
           WAIT: 30
           SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
-          DELTA: ${{ env.DEPLOY_TYPE }}
+          DEPLOY_TYPE: ${{ env.DEPLOY_TYPE }}
