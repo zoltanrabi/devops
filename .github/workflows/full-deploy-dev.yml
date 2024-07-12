@@ -1,4 +1,4 @@
-name: Full Deploy To Test
+name: Scheduled Full Deploy To Dev
 
 on:
   schedule:
@@ -9,16 +9,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: test
           fetch-depth: 0
 
-      # Run tests for modified Apex components
-      - name: Run tests for modified Apex components
+      - name: Deploy full repository to Dev org
         uses: ./.github/actions/sf-deploy-full
         with:
-          DRY_RUN: false  # or false, depending on your needs
+          DRY_RUN: false
           TEST_LEVEL: RunLocalTests
           WAIT: 30
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_TEST }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}
