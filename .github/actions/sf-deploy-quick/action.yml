@@ -57,4 +57,4 @@ runs:
       shell: bash
       run: |
         echo "Performing quick deploy..."
-        sf project deploy quick --job-id $QUICK_DEPLOY_ID --wait 10
+        sf project deploy quick --job-id $QUICK_DEPLOY_ID2 --wait 10
