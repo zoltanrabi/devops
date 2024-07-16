@@ -29,6 +29,14 @@ async function run() {
       return;
     }
 
+    // Check Other Workflow Status
+    const { data: runs } = await octokit.rest.actions.listWorkflowRunsForRepo({
+      owner: pr.base.user.login,
+      repo: pr.base.repo.name,
+      branch: pr.head.ref,
+      event: 'pull_request'
+    });
+
     // Get the workflow run with job names containing 'validate'
     const validateWorkflow = runs.workflow_runs.find(async (run) => {
       const { data: jobs } = await octokit.rest.actions.listJobsForWorkflowRun({
