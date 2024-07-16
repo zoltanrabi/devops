@@ -9,7 +9,11 @@ on:
     paths:
       - 'force-app/**'
 
-run-name: 'Validate to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }}'
+run-name: >-
+  ${{ github.event.pull_request.base.ref == 'dev' && format('Validate to INT by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == 'test' && format('Validate to UAT by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == 'main' && format('Validate to PROD by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
+      }}
 
 jobs:
   validate:
