@@ -5,8 +5,11 @@ on:
     types:
       - submitted
 
-run-name: 'Deploy  to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }}'
-
+run-name: >-
+  ${{ github.event.pull_request.base.ref == 'dev' && format('Deploy to INT by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == 'test' && format('Deploy to UAT by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == 'main' && format('Deploy to PROD by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
+      }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
