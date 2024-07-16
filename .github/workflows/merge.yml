@@ -5,13 +5,8 @@ on:
     workflows: ["Deploy"]
     types:
       - completed
-permissions:
-  actions: write
-  pull-requests: write
-  contents: write
-  deployments: write
-  issues: write
-  repository-projects: read
+
+permissions: write-all
 
 jobs:
   merge:
