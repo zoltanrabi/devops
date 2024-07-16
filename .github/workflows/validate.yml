@@ -9,6 +9,8 @@ on:
     paths:
       - 'force-app/**'
 
+run-name: 'Validate to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }}'
+
 jobs:
   validate:
     runs-on: ubuntu-latest

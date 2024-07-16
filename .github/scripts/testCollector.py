@@ -84,8 +84,29 @@ def find_test_classes(classes_folder, related_objects):
 
     return test_classes
 
+def extract_objects_from_package_xml(xml_file):
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+
+    # Namespace to be used for finding elements
+    namespace = {'sf': 'http://soap.sforce.com/2006/04/metadata'}
+
+    # Set to store the object names
+    objects_set = set()
+
+    # Loop through types and members
+    for types in root.findall('sf:types', namespace):
+        name = types.find('sf:name', namespace)
+        if name is not None and name.text == 'CustomObject':
+            for member in types.findall('sf:members', namespace):
+                if member.text:
+                    objects_set.add(member.text)
+
+    return objects_set
+
 test_classes = list_apex_classes(package_xml_path, classes_folder_path)
 flow_names = get_flows_from_package(package_xml_path)
 related_objects = collect_flow_related_objects(flow_folder_path, flow_names)
+related_objects.update(extract_objects_from_package_xml(package_xml_path))
 test_classes.update(find_test_classes(classes_folder_path, related_objects))
 print(' '.join(test_classes))

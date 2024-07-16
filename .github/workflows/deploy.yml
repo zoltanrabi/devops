@@ -5,6 +5,8 @@ on:
     types:
       - submitted
 
+run-name: 'Deploy  to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }}'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
