@@ -7,9 +7,9 @@ on:
       - completed
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == 'dev' && format('Merge to {0} by {1} PR Name: {2}', github.event.pull_request.base.ref, github.event.pull_request.user.login, github.event.pull_request.title) || 
-      github.event.pull_request.base.ref == 'test' && format('Merge to {0} by {1} PR Name: {2}', github.event.pull_request.base.ref, github.event.pull_request.user.login, github.event.pull_request.title) ||
-      github.event.pull_request.base.ref == 'main' && format('Merge to {0} by {1} PR Name: {2}', github.event.pull_request.base.ref, github.event.pull_request.user.login, github.event.pull_request.title)
+  ${{ github.event.client_payload.base_ref == 'dev' && format('Merge to {0} by {1} PR Name: {2}', github.event.client_payload.base_ref, github.event.client_payload.user_login, github.event.client_payload.pr_title) || 
+      github.event.client_payload.base_ref == 'test' && format('Merge to {0} by {1} PR Name: {2}', github.event.client_payload.base_ref, github.event.client_payload.user_login, github.event.client_payload.pr_title) ||
+      github.event.client_payload.base_ref == 'main' && format('Merge to {0} by {1} PR Name: {2}', github.event.client_payload.base_ref, github.event.client_payload.user_login, github.event.client_payload.pr_title)
       }}
 
 jobs:
