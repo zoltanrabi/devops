@@ -6,8 +6,6 @@ on:
     types:
       - completed
 
-permissions: write-all
-
 jobs:
   merge:
     runs-on: "ubuntu-latest"
