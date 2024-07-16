@@ -26,7 +26,7 @@
     <recordUpdates>
         <name>update</name>
         <label>update</label>
-        <locationX>177</locationX>
+        <locationX>178</locationX>
         <locationY>323</locationY>
         <inputAssignments>
             <field>Status</field>

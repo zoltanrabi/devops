@@ -26,7 +26,7 @@
     <recordUpdates>
         <name>asd</name>
         <label>asd</label>
-        <locationX>176</locationX>
+        <locationX>178</locationX>
         <locationY>324</locationY>
         <inputAssignments>
             <field>CleanStatus</field>
