@@ -8,8 +8,11 @@ on:
       - main
     paths:
       - 'force-app/**'
-
-run-name: 'Validate to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }} ${{ env.TEST_LEVEL }}'
+if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
+            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
+            echo "TEST_LEVEL=RunSpecifiedTests" >> $GITHUB_ENV
+            echo "DEPLOY_TYPE=DELTA" >> $GITHUB_ENV 
+run-name: 'Validate to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }}'
 
 jobs:
   validate:
