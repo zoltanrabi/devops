@@ -10,11 +10,11 @@ on:
       - 'force-app/**'
 
 run-name: |
-if [ ${{ github.event.pull_request.base.ref }} == "dev" ]; then
-  echo "My Regression tests ez"
-else
-  echo "My Regression tests emez"
-fi
+  if [ ${{ github.event.pull_request.base.ref }} == "dev" ]; then
+    echo "My Regression tests ez"
+  else
+    echo "My Regression tests emez"
+  fi
 
 jobs:
   validate:
