@@ -37,7 +37,21 @@ async function run() {
       event: 'pull_request'
     });
 
-    const validateWorkflow = runs.workflow_runs.find(run => run.name.startsWith('Validate ') && run.name.endsWith(' Pull Request') && run.head_sha === pr.head.sha);
+    // Get the workflow run with job names containing 'validate'
+    const validateWorkflow = runs.workflow_runs.find(async (run) => {
+      const { data: jobs } = await octokit.rest.actions.listJobsForWorkflowRun({
+        owner: pr.base.user.login,
+        repo: pr.base.repo.name,
+        run_id: run.id
+      });
+
+      return jobs.jobs.some(job => job.name.toLowerCase().includes('validate')) && run.head_sha === pr.head.sha;
+    });
+
+    if (!validateWorkflow || validateWorkflow.conclusion !== 'success') {
+      core.setFailed('The required validation workflow has not passed.');
+      return;
+    }
 
     if (!validateWorkflow || validateWorkflow.conclusion !== 'success') {
       core.setFailed('The required validation workflow has not passed.');

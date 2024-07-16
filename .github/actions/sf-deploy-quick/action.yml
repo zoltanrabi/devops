@@ -44,17 +44,17 @@ runs:
       run: |
         echo "Querying the latest deployment ID..."
         QUERY_RESULT=$(sf data query --query "SELECT Id FROM DeployRequest ORDER BY CreatedDate DESC LIMIT 1" --json --use-tooling-api)
-        DEPLOY_ID=$(echo $QUERY_RESULT | jq -r '.result.records[0].Id')
-        if [ -z "$DEPLOY_ID" ]; then
+        QUICK_DEPLOY_ID=$(echo $QUERY_RESULT | jq -r '.result.records[0].Id')
+        if [ -z "$QUICK_DEPLOY_ID" ]; then
           echo "Error: Unable to fetch the latest deployment ID."
           exit 1
         fi
         TRUNCATED_DEPLOY_ID=${DEPLOY_ID::-3}
         echo "Quick deploy ID: $TRUNCATED_DEPLOY_ID"
-        echo "QUICK_DEPLOY_ID=$TRUNCATED_DEPLOY_ID" >> $GITHUB_ENV
+        echo "QUICK_DEPLOY_ID2=$QUICK_DEPLOY_ID" >> $GITHUB_ENV
 
     - name: Quick Deploy
       shell: bash
       run: |
         echo "Performing quick deploy..."
-        sf project deploy quick --job-id $QUICK_DEPLOY_ID --wait 10
+        sf project deploy quick --job-id $QUICK_DEPLOY_ID2 --wait 10

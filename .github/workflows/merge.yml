@@ -19,4 +19,4 @@ jobs:
       - name: "Auto Merge Pull Request"
         uses: ./.github/actions/merge
         with:
-          github-token: "${{ secrets.SFDX_WORKFLOW_TOKEN }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"

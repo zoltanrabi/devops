@@ -27,7 +27,7 @@
         <name>asd</name>
         <label>asd</label>
         <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationY>324</locationY>
         <inputAssignments>
             <field>CleanStatus</field>
             <value>

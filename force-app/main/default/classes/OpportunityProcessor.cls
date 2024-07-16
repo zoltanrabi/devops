@@ -9,4 +9,4 @@ public class OpportunityProcessor {
         AggregateResult[] results = [SELECT SUM(Amount) total FROM Opportunity WHERE Id IN :opportunityIds];
         return (Decimal)results[0].get('total');
     }
-}  
+}   
