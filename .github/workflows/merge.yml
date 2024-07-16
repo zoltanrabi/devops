@@ -6,9 +6,10 @@ on:
     types:
       - completed
 permissions:
-  actions: read
+  actions: write
   pull-requests: write
   contents: write
+  deployments: write
   issues: write
   repository-projects: read
 
