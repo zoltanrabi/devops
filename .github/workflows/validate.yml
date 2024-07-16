@@ -10,9 +10,11 @@ on:
       - 'force-app/**'
 
 run-name: >-
-  if [[ ${{ github.event.repository.name }} == "ci-systems" ]]; then
-  "My Regression tests: ${{ inputs.my_version }} + ci-systems: ${{ github.head_ref || github.ref_name }}"
-  else
+if [[ ${{ github.event.repository.name }} == "ci-systems" ]]; then
+"My Regression tests: ${{ inputs.my_version }} + ci-systems: ${{ github.head_ref || github.ref_name }}"
+else
+"My Regression tests: ${{ inputs.my_version }}"
+fi
 
 jobs:
   validate:
