@@ -10,7 +10,7 @@ on:
       - 'force-app/**'
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == "dev" && format('My name dev') || github.event.pull_request.base.ref == "test" && format('My name test')}}
+  ${{ github.event.pull_request.base.ref == 'dev' && format('My name dev') || github.event.pull_request.base.ref == 'test' && format('My name test')}}
 
 jobs:
   validate:
