@@ -9,12 +9,12 @@ on:
     paths:
       - 'force-app/**'
 
-run-name: 
-  if [[ ${{ github.event.pull_request.base.ref }} == "dev" ]]; then
+run-name: >-
+if [[ ${{ github.event.pull_request.base.ref }} == "dev" ]]; then
   "My Regression tests: ez"
-  else
+else
   "My Regression tests: emez"
-  fi
+fi
 
 jobs:
   validate:
