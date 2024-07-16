@@ -6,6 +6,12 @@ on:
     types:
       - completed
 
+run-name: >-
+  ${{ github.event.pull_request.base.ref == 'dev' && format('Merge to {0} by {1} PR Name: {2}', github.event.pull_request.base.ref, github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == 'test' && format('Merge to {0} by {1} PR Name: {2}', github.event.pull_request.base.ref, github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == 'main' && format('Merge to {0} by {1} PR Name: {2}', github.event.pull_request.base.ref, github.event.pull_request.user.login, github.event.pull_request.title)
+      }}
+
 jobs:
   merge:
     runs-on: "ubuntu-latest"
