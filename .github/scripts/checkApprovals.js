@@ -37,7 +37,7 @@ async function run() {
       event: 'pull_request'
     });
 
-    const validateWorkflow = runs.workflow_runs.find(run => run.name.startsWith('Validate ') && run.name.endsWith(' Pull Request') && run.head_sha === pr.head.sha);
+    const validateWorkflow = runs.workflow_runs.find(run => run.name.startsWith('Validate') && run.head_sha === pr.head.sha);
 
     if (!validateWorkflow || validateWorkflow.conclusion !== 'success') {
       core.setFailed('The required validation workflow has not passed.');
