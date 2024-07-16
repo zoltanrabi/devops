@@ -10,7 +10,7 @@ on:
       - 'force-app/**'
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == 'dev' && format('My name' + github.event.pull_request.base.ref + github.actor) || 
+  ${{ github.event.pull_request.base.ref == 'dev' && format('My name {0} {1}', github.event.pull_request.base.ref, github.actor) || 
       github.event.pull_request.base.ref == 'test' && format('My name test') ||
       github.event.pull_request.base.ref == 'test' && format('My name test') }}
 
