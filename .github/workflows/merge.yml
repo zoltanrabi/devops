@@ -6,11 +6,12 @@ on:
     types:
       - completed
 permissions:
+  actions: read
   pull-requests: write
   contents: write
   issues: write
   repository-projects: read
-  
+
 jobs:
   merge:
     runs-on: "ubuntu-latest"
