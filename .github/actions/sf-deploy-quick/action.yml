@@ -45,7 +45,7 @@ runs:
         echo "Querying the latest deployment ID..."
         QUERY_RESULT=$(sf data query --query "SELECT Id FROM DeployRequest ORDER BY CreatedDate DESC LIMIT 1" --json --use-tooling-api)
         QUICK_DEPLOY_ID=$(echo $QUERY_RESULT | jq -r '.result.records[0].Id')
-        if [ -z "$DEPLOY_ID" ]; then
+        if [ -z "$QUICK_DEPLOY_ID" ]; then
           echo "Error: Unable to fetch the latest deployment ID."
           exit 1
         fi
