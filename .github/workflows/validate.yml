@@ -10,10 +10,10 @@ on:
       - 'force-app/**'
 
 run-name: >-
-  if [[ ${{ github.event.repository.name }} == "ci-systems" ]]; then
-  "My Regression tests: ${{ inputs.my_version }} + ci-systems: ${{ github.head_ref || github.ref_name }}"
+  if [[ ${{ github.event.pull_request.base.ref }} == "dev" ]]; then
+  "My Regression tests: ez"
   else
-  "My Regression tests: ${{ inputs.my_version }}"
+  "My Regression tests: emez"
   fi
 
 jobs:
