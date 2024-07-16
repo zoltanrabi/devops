@@ -10,9 +10,10 @@ on:
       - 'force-app/**'
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == 'dev' && format('My name {0} {1} {2}', github.event.pull_request.base.ref, github.actor, github.event.pull_request.user.login) || 
-      github.event.pull_request.base.ref == 'test' && format('My name test') ||
-      github.event.pull_request.base.ref == 'main' && format('My name main') }}
+  ${{ github.event.pull_request.base.ref == 'dev' && format('Validate to INT by {1} PR Name: {2}', github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == 'test' && format('Validate to UAT by {1} PR Name: {2}', github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == 'main' && format('Validate to PROD by {1} PR Name: {2}', github.event.pull_request.user.login, github.event.pull_request.title)
+      }}
 
 jobs:
   validate:
