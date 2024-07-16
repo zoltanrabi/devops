@@ -51,7 +51,7 @@ runs:
         fi
         TRUNCATED_DEPLOY_ID=${DEPLOY_ID::-3}
         echo "Quick deploy ID: $TRUNCATED_DEPLOY_ID"
-        echo "QUICK_DEPLOY_ID2=$TRUNCATED_DEPLOY_ID" >> $GITHUB_ENV
+        echo "QUICK_DEPLOY_ID2=$QUICK_DEPLOY_ID" >> $GITHUB_ENV
 
     - name: Quick Deploy
       shell: bash
