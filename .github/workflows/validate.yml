@@ -8,11 +8,11 @@ on:
       - main
     paths:
       - 'force-app/**'
-if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
-            echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
-            echo "TEST_LEVEL=RunSpecifiedTests" >> $GITHUB_ENV
-            echo "DEPLOY_TYPE=DELTA" >> $GITHUB_ENV 
-run-name: 'Validate to ${{ github.event.pull_request.base.ref }} by @${{ github.actor }} PR Name: ${{ github.event.pull_request.title }}'
+
+run-name: >-
+  if [[ ${{ github.event.repository.name }} == "ci-systems" ]]; then
+  "My Regression tests: ${{ inputs.my_version }} + ci-systems: ${{ github.head_ref || github.ref_name }}"
+  else
 
 jobs:
   validate:
