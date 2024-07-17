@@ -1,7 +1,7 @@
 @isTest
 public class AccountSecondTest {
     @isTest
-    static void testCreateAccount() {
+    static void testCreateAccount2() {
         Test.startTest();
         AccountSecond.createAccountSecond('Test Account');
         Test.stopTest();
@@ -11,7 +11,7 @@ public class AccountSecondTest {
     }
 
     @isTest
-    static void testUpdateAccountName() {
+    static void testUpdateAccountName2() {
         Account acc = new Account(Name = 'Initial Name');
         insert acc;
 
@@ -24,7 +24,7 @@ public class AccountSecondTest {
     }  
 
     @isTest
-    static void testDeleteAccount() {
+    static void testDeleteAccount2() {
         Account acc = new Account(Name = 'Delete Me');
         insert acc;
 
