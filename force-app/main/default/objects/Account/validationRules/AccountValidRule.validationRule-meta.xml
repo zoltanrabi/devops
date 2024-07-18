@@ -2,6 +2,6 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>AccountValidRule</fullName>
     <active>true</active>
-    <errorConditionFormula>Website = &apos;nosite&apos; &amp;&amp;  BillingCity = &apos;mittomenn&apos;</errorConditionFormula>
+    <errorConditionFormula>Website = &apos;nosite&apos; &amp;&amp;  BillingCity = &apos;mittomen&apos;</errorConditionFormula>
     <errorMessage>error</errorMessage>
 </ValidationRule>
