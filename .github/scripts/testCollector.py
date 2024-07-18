@@ -90,13 +90,13 @@ def extract_objects_from_package_xml(xml_file):
     # Parse the XML file
     tree = ET.parse(xml_file)
     root = tree.getroot()
-    ns = {'pkg': 'http://soap.sforce.com/2006/04/metadata'}
+    ns = {'ns': 'http://soap.sforce.com/2006/04/metadata'}
     
     # Define the elements we are interested in
     elements_of_interest = {'CustomField', 'ValidationRule'}
     
     # Iterate over types in the package
-    for types in root.findall('pkg:types', namespaces=ns):
+    for types in root.findall('ns:types', namespaces=ns):
         name = types.find('ns:name', ns)
         if name is not None and name.text in elements_of_interest:
             # Iterate over members of the relevant types
