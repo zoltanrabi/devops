@@ -5,7 +5,7 @@
         <name>set</name>
         <label>set</label>
         <locationX>172</locationX>
-        <locationY>433</locationY>
+        <locationY>434</locationY>
         <assignmentItems>
             <assignToReference>Get.StageName</assignToReference>
             <operator>Assign</operator>
