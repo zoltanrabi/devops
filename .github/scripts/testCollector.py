@@ -64,6 +64,8 @@ def collect_flow_related_objects(flow_folder, flow_names):
                     trigger_type = start_element.find('md:triggerType', namespaces=ns)
                     if trigger_type is not None and trigger_type.text in ['RecordAfterSave', 'RecordBeforeDelete', 'RecordBeforeSave']:
                         object_name = start_element.find('md:object', namespaces=ns).text
+                        if object_name.endswith('__c'):
+                            object_name = object_name[:-3]
                         related_objects.add(object_name)
             except ET.ParseError as e:
                 print(f"Error parsing {file_path}: {e}")
