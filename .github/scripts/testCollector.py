@@ -85,24 +85,27 @@ def find_test_classes(classes_folder, related_objects):
     return test_classes
 
 def extract_objects_from_package_xml(xml_file):
+    referenced_objects = set()
+    
+    # Parse the XML file
     tree = ET.parse(xml_file)
     root = tree.getroot()
-
-    # Namespace to be used for finding elements
-    namespace = {'sf': 'http://soap.sforce.com/2006/04/metadata'}
-
-    # Set to store the object names
-    objects_set = set()
-
-    # Loop through types and members
-    for types in root.findall('sf:types', namespace):
-        name = types.find('sf:name', namespace)
-        if name is not None and name.text == 'CustomObject':
-            for member in types.findall('sf:members', namespace):
+    
+    # Define the elements we are interested in
+    elements_of_interest = {'CustomField', 'ValidationRule'}
+    
+    # Iterate over types in the package
+    for types in root.findall('types'):
+        name = types.find('name')
+        if name is not None and name.text in elements_of_interest:
+            # Iterate over members of the relevant types
+            for member in types.findall('members'):
                 if member.text:
-                    objects_set.add(member.text)
-
-    return objects_set
+                    # Split the member text to get the object name (part before the first '.')
+                    object_name = member.text.split('.')[0]
+                    referenced_objects.add(object_name)
+    
+    return referenced_objects
 
 test_classes = list_apex_classes(package_xml_path, classes_folder_path)
 flow_names = get_flows_from_package(package_xml_path)
