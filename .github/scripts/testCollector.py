@@ -104,6 +104,8 @@ def extract_objects_from_package_xml(xml_file):
                 if member.text:
                     # Split the member text to get the object name (part before the first '.')
                     object_name = member.text.split('.')[0]
+                    if object_name.endswith('__c'):
+                        object_name = object_name[:-3]
                     referenced_objects.add(object_name)
     
     return referenced_objects
