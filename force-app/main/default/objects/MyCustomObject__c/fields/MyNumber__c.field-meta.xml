@@ -3,7 +3,7 @@
     <fullName>MyNumber__c</fullName>
     <externalId>false</externalId>
     <label>MyNumber</label>
-    <precision>18</precision>
+    <precision>17</precision>
     <required>false</required>
     <scale>0</scale>
     <trackTrending>false</trackTrending>
