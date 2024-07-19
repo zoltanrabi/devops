@@ -3,5 +3,5 @@
     <fullName>MySecondValidationRule</fullName>
     <active>true</active>
     <errorConditionFormula>MyNumber__c =13</errorConditionFormula>
-    <errorMessage>13 se legyen mar</errorMessage>
+    <errorMessage>13 se legyen marr</errorMessage>
 </ValidationRule>
