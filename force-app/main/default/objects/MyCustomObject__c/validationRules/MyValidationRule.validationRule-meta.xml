@@ -3,5 +3,5 @@
     <fullName>MyValidationRule</fullName>
     <active>true</active>
     <errorConditionFormula>MyNumber__c = 12</errorConditionFormula>
-    <errorMessage>ne legyenn 12</errorMessage>
+    <errorMessage>ne legyen 12</errorMessage>
 </ValidationRule>

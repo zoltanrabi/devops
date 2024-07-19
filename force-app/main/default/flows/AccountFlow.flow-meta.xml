@@ -26,7 +26,7 @@
     <recordUpdates>
         <name>up</name>
         <label>up</label>
-        <locationX>177</locationX>
+        <locationX>176</locationX>
         <locationY>287</locationY>
         <inputAssignments>
             <field>AnnualRevenue</field>
