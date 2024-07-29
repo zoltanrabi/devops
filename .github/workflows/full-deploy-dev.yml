@@ -1,4 +1,4 @@
-name: Scheduled Full Deploy To Dev
+name: Scheduled Full Deploy To $DEV_BRANCH
 
 on:
   schedule:
@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: test
+          ref: $DEV_BRANCH
           fetch-depth: 0
 
-      - name: Deploy full repository to Dev org
+      - name: Deploy full repository to $DEV_BRANCH org
         uses: ./.github/actions/sf-deploy-full
         with:
           DRY_RUN: false
