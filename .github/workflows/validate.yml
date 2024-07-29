@@ -3,9 +3,9 @@ name: Validate
 on:
   pull_request:
     branches:
-      - ${{ vars.DEV_BRANCH }}
-      - ${{ vars.TEST_BRANCH }}
-      - ${{ vars.PROD_BRANCH }}
+      - dev
+      - test
+      - prod
     paths:
       - 'force-app/**'
 
