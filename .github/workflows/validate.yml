@@ -8,11 +8,18 @@ on:
       - prod
     paths:
       - 'force-app/**'
+env:
+  DEV_BRANCH: ${{ vars.DEV_BRANCH }}
+  TEST_BRANCH: ${{ vars.TEST_BRANCH }}
+  PROD_BRANCH: ${{ vars.PROD_BRANCH }}
+  INT_ORG: ${{ vars.INT_ORG }}
+  UAT_ORG: ${{ vars.UAT_ORG }}
+  PROD_ORG: ${{ vars.PROD_ORG }}
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == ${{ vars.DEV_BRANCH }} && format('Validate to ${{ vars.INT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
-      github.event.pull_request.base.ref == ${{ vars.TEST_BRANCH }} && format('Validate to ${{ vars.UAT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
-      github.event.pull_request.base.ref == ${{ vars.PROD_BRANCH }} && format('Validate to ${{ vars.PROD_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
+  ${{ github.event.pull_request.base.ref == ${{ env.DEV_BRANCH }} && format('Validate to ${{ vars.INT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == ${{ env.TEST_BRANCH }} && format('Validate to ${{ vars.UAT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == ${{ env.PROD_BRANCH }} && format('Validate to ${{ vars.PROD_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
       }}
 
 jobs:
