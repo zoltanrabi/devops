@@ -6,9 +6,9 @@ on:
       - submitted
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == '$DEV_BRANCH' && format('Deploy to $INT_ORG by {0} PR Name: {1}', github.actor, github.event.pull_request.title) || 
-      github.event.pull_request.base.ref == '$TEST_BRANCH' && format('Deploy to $UAT_ORG by {0} PR Name: {1}', github.actor, github.event.pull_request.title) ||
-      github.event.pull_request.base.ref == '$PROD_BRANCH' && format('Deploy to $PROD_ORG by {0} PR Name: {1}', github.actor, github.event.pull_request.title)
+  ${{ github.event.pull_request.base.ref == 'dev' && format('Deploy to INT by {0} PR Name: {1}', github.actor, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == 'test' && format('Deploy to UAT by {0} PR Name: {1}', github.actor, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == 'prod' && format('Deploy to PRDO by {0} PR Name: {1}', github.actor, github.event.pull_request.title)
       }}
 jobs:
   deploy:
