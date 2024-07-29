@@ -10,9 +10,9 @@ on:
       - 'force-app/**'
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == '${{ DEV_BRANCH }}' && format('Validate to ${{ INT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
-      github.event.pull_request.base.ref == '${{ TEST_BRANCH }}' && format('Validate to ${{ UAT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
-      github.event.pull_request.base.ref == '${{ PROD_BRANCH }}' && format('Validate to ${{ PROD_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
+  ${{ github.event.pull_request.base.ref == '${{ vars.DEV_BRANCH }}' && format('Validate to ${{ vars.INT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == '${{ vars.TEST_BRANCH }}' && format('Validate to ${{ vars.UAT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == '${{ vars.PROD_BRANCH }}' && format('Validate to ${{ vars.PROD_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
       }}
 
 jobs:
@@ -25,15 +25,15 @@ jobs:
 
       - name: Set SFDX Auth URL and Test Level
         run: |
-          if [ "${{ github.event.pull_request.base.ref }}" == "${{ DEV_BRANCH }}" ]; then
+          if [ "${{ github.event.pull_request.base.ref }}" == "${{ vars.DEV_BRANCH }}" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_DEV }}" >> $GITHUB_ENV
             echo "TEST_LEVEL=RunSpecifiedTests" >> $GITHUB_ENV
             echo "DEPLOY_TYPE=DELTA" >> $GITHUB_ENV
-          elif [ "${{ github.event.pull_request.base.ref }}" == "${{ TEST_BRANCH }}" ]; then
+          elif [ "${{ github.event.pull_request.base.ref }}" == "${{ vars.TEST_BRANCH }}" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL_TEST }}" >> $GITHUB_ENV
             echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
             echo "DEPLOY_TYPE=FULL" >> $GITHUB_ENV
-          elif [ "${{ github.event.pull_request.base.ref }}" == "${{ PROD_BRANCH }}" ]; then
+          elif [ "${{ github.event.pull_request.base.ref }}" == "${{ vars.PROD_BRANCH }}" ]; then
             echo "SFDX_AUTH_URL=${{ secrets.SFDX_AUTH_URL }}" >> $GITHUB_ENV
             echo "TEST_LEVEL=RunLocalTests" >> $GITHUB_ENV
             echo "DEPLOY_TYPE=FULL" >> $GITHUB_ENV
