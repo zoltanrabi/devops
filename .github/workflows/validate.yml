@@ -17,9 +17,9 @@ env:
   PROD_ORG: ${{ vars.PROD_ORG }}
 
 run-name: >-
-  ${{ github.event.pull_request.base.ref == ${{ env.DEV_BRANCH }} && format('Validate to ${{ vars.INT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
-      github.event.pull_request.base.ref == ${{ env.TEST_BRANCH }} && format('Validate to ${{ vars.UAT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
-      github.event.pull_request.base.ref == ${{ env.PROD_BRANCH }} && format('Validate to ${{ vars.PROD_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
+  ${{ github.event.pull_request.base.ref == '${{ env.DEV_BRANCH }}' && format('Validate to ${{ vars.INT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
+      github.event.pull_request.base.ref == '${{ env.TEST_BRANCH }}' && format('Validate to ${{ vars.UAT_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
+      github.event.pull_request.base.ref == '${{ env.PROD_BRANCH }}' && format('Validate to ${{ vars.PROD_ORG }} by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title)
       }}
 
 jobs:
