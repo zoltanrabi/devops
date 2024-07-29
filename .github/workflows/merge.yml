@@ -9,9 +9,9 @@ on:
 permissions: write-all
 
 run-name: >-
-  ${{ github.event.workflow_run.pull_requests[0].base.ref == 'dev' && format('Merge to dev by {0} PR Number: {1}', github.actor, github.event.workflow_run.pull_requests[0].number) || 
-      github.event.workflow_run.pull_requests[0].base.ref == 'test' && format('Merge to test by {0} PR Number: {1}', github.actor, github.event.workflow_run.pull_requests[0].number) ||
-      github.event.workflow_run.pull_requests[0].base.ref == 'main' && format('Merge to main by {0} PR Number: {1}', github.actor, github.event.workflow_run.pull_requests[0].number)
+  ${{ github.event.workflow_run.pull_requests[0].base.ref == '$DEV_BRANCH' && format('Merge to $INT_ORG by {0} PR Number: {1}', github.actor, github.event.workflow_run.pull_requests[0].number) || 
+      github.event.workflow_run.pull_requests[0].base.ref == '$TEST_BRANCH' && format('Merge to $UAT_ORG by {0} PR Number: {1}', github.actor, github.event.workflow_run.pull_requests[0].number) ||
+      github.event.workflow_run.pull_requests[0].base.ref == '$PROD_BRANCH' && format('Merge to $PROD_ORG by {0} PR Number: {1}', github.actor, github.event.workflow_run.pull_requests[0].number)
       }}
 
 jobs:
