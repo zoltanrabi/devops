@@ -1,4 +1,4 @@
-name: Scheduled Full Deploy To ${{ vars.DEV_BRANCH }}
+name: Scheduled Full Deploy To Dev
 
 on:
   schedule:
