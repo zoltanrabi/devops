@@ -1,37 +1,26 @@
-body:
-  - type: textarea
-    id: description
-    attributes:
-      label: "Description"
-      description: Please enter an explicit description of your implementation
-      placeholder: Short and explicit description of your implementation...
-    validations:
-      required: true
-  - type: input
-    id: ticketnumber
-    attributes:
-      label: "Ticket number"
-      description: Please enter the ticket number or other identifier if available
-      placeholder: JIRATICKET-1234
-    validations:
-      required: false
-  - type: textarea
-    id: otherinfo
-    attributes:
-      label: "Other"
-      description: If you have anything you wanna share type here
-      placeholder: ...
-    validations:
-      required: false
-  - type: dropdown
-    id: type
-    attributes:
-      label: "Type of change"
-      description: Please select the type of your change?
-      multiple: true
-      options:
-        - Bugfix
-        - New feature
-        - Configuration
-    validations:
-      required: false
+## Description
+<!-- Please enter an explicit description of your implementation -->
+<!-- Short and explicit description of your implementation... -->
+
+## Ticket Number
+<!-- Please enter the ticket number or other identifier if available -->
+<!-- JIRATICKET-1234 -->
+
+## Other Information
+<!-- If you have anything you want to share, type here -->
+<!-- ... -->
+
+## Type of Change
+<!-- Please select the type of your change -->
+- [ ] Bugfix
+- [ ] New feature
+- [ ] Configuration
+
+## Checklist
+<!-- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [ ] My code follows the code style of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+- [ ] I have added tests to cover my changes.
+- [ ] All new and existing tests passed.
