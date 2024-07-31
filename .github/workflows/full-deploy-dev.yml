@@ -14,7 +14,7 @@ jobs:
           ref: dev
           fetch-depth: 0
 
-      - name: Deploy full repository to $DEV_BRANCH org
+      - name: Deploy full repository to "${{ vars.DEV_BRANCH }}" org
         uses: ./.github/actions/sf-deploy-full
         with:
           DRY_RUN: false
