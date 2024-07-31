@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: $DEV_BRANCH
+          ref: dev
           fetch-depth: 0
 
       - name: Deploy full repository to $DEV_BRANCH org
