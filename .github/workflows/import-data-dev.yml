@@ -17,4 +17,4 @@ jobs:
         with:
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}
-          DATA_FOLDER: .github/data/myData/export-demo-Account-Contact-Opportunity-plan.json
+          DATA_FOLDER: .github/data/export-demo-Account-Contact-Opportunity-plan.json
