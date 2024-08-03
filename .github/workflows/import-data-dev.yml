@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: dev
+          ref: ${{ vars.DEV_BRANCH }}
           fetch-depth: 0
 
       - name: Import data to ${{ vars.INT_ORG }} org
