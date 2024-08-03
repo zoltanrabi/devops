@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: ${{ vars.DEV_BRANCH }}
           fetch-depth: 0
 
       - name: Deploy full repository to "${{ vars.INT_ORG }}" org
