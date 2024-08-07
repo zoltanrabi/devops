@@ -58,7 +58,7 @@
      - Require status checks to pass (e.g., validate)
      - Block force pushes
 
-![GitHub Branch Rules](.github/images/githubRuleset.jpg)
+![GitHub Branch Rules](.github/images/githubRuleset.png)
 2. **It is possible to restrict who can push to branches. To set it up follow the documentation:**
      - [Protection rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule)
 
