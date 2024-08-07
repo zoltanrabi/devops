@@ -4,21 +4,22 @@
 
 #### Salesforce Setup
 
-1. **Install Salesforce CLI**: [Download Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli)
-2. **Salesforce Extension Pack**: Install Salesforce Extension Pack for VS Code
-3. **Create a SF DEV org**: [Sign Up](https://developer.salesforce.com/signup)
+1. **Install Salesforce CLI:** [Download Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli)
+2. **Salesforce Extension Pack:** Install Salesforce Extension Pack for VS Code
+3. **Create a SF DEV org:** [Sign Up](https://developer.salesforce.com/signup)
 4. **Connect VS Code to the DEV org**
 
 #### GitHub Setup
 
-1. **Register on GitHub**: [Sign Up](https://github.com/join)
-2. **Create a repository**: [New Repository](https://github.com/new)
-3. **Download GitHub Desktop and connect your repository**: [Download Github Desktop](https://github.com/apps/desktop)
+1. **Register on GitHub:** [Sign Up](https://github.com/join)
+2. **Create a repository:** [New Repository](https://github.com/new)
+3. **Download GitHub Desktop and connect your repository:** [Download Github Desktop](https://github.com/apps/desktop)
 4. **Generate sfdxAuthUrl:**
    - Login to your orgs from VS code
    - Generate and save your sfdxAuthUrl:
    ```sf org display --verbose --json -o your-org-name ```
-
+   - Save the contect of the marked line (string after "force://PlatformCLI::)
+![GitHub Branch Rules](.github/images/sfdxAuthUrl.jpg)
 ---
 
 ## GitHub Configuration
@@ -27,17 +28,17 @@
 
 1. **Create repository secrets:**
    - Go to repository Settings > Secrets and Variables > Actions > New Repository Secret
-   - Create the secrets with the following names and set the values to the previously generated sfdxAuthUrls
-   - SFDX_AUTH_URL_DEV
-   - SFDX_AUTH_URL_TEST
-   - SFDX_AUTH_URL
+   - Create the secrets with the following names and set the values to the previously generated sfdxAuthUrls:
+    - SFDX_AUTH_URL_DEV
+    - SFDX_AUTH_URL_TEST
+    - SFDX_AUTH_URL
 
 2. **Add repository variables:**
    - Change to variables tab and add New repository variables:
-   - DEV_BRANCH = dev
-   - TEST_BRANCH = test
-   - PROD_BRANCH = prod
-   - INT_ORG = INT
+    - DEV_BRANCH = dev
+    - TEST_BRANCH = test
+    - PROD_BRANCH = prod
+    - INT_ORG = INT
 
 3. **Set workflow permissions:**
    - Go to Settings > Actions > General.
@@ -73,7 +74,12 @@
    - Branch rules require an approval and the Validation workflow to run. Validation workflow start automatically after the PR is created.
 2. **Validation**
    - Validate the changes against target org. Types:
-        Delta: TEST_LEVEL is: RunSpecifiedTests. Runs only changes regarding the changed files
+        Delta: TEST_LEVEL is: RunSpecifiedTests. DELTA validation means that test only those will run which are connected to the changes in the PR:
+        - Test classes: changed test classes
+        - Normal classes/triggerclasses: Test classes which are related to a changed class (for example: if AccountTrigger.cls is changed the code will try to find test classes which has Test at the end of the class name and Account anywhere in the class name)
+        - Validation rule: Object related test classes related to a changed validation rule (for example: if you change Validation rule related to the Account Object the code will gather the test classes which has Test at the end of the class name and Account anywhere in the class name)
+        - Record-Triggered flows: Test classes realted to Record-Triggered flows
+        - Fields: The test classes related to the Object for which field is changed
         Full: TEST_LEVEL is: RunLocalTests. Runs all test
 3. **PR Approval**
    - PR needs to be approved at least by one approver after the Validation executes successfully. It triggers the automatic Deployment. 
@@ -85,3 +91,12 @@
 5. **Merge**
    - Code is merged to the target branch after successful deployment
 #### Key componenet of the validation workflow
+1. **Validation.yml workflow**
+   - It contains the configuration for the validation:
+     - branches: the used branch names are listed (dev, test, prod)
+     - run-name: it will generate the name for the workflow which is visible in the Action tab in the GitHub repository. It check against which branch we are doing the validation. It generates the corresponding Action name with the org names
+     - Under jobs: -> validate: -> name: Set SFDX Auth URL and Test Level we define the sfdxAuthUrl based on the target org and the test level for the validation. DEPLOY_TYPE variable controls if the validation is DELTA validation or FULL validation. Two combination is possible:
+      - DEPLOY_TYPE = DELTA and TEST_LEVEL = RunSpecifiedTests
+      - DEPLOY_TYPE = FULL and TEST_LEVEL = RunLocalTests
+![GitHub Branch Rules](.github/images/validation1.png)
+![GitHub Branch Rules](.github/images/validation2.png)
