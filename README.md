@@ -1,82 +1,87 @@
-# Salesforce DX Project: Next Steps
+## Solutions with GitHub Actions
 
-Our GitHub CI steps:
--Commit changes
--Create PR with the changes
--Validate the changes (only run necessary tests, changed tests)
--Assignee review the PR
--Assignee Approve PR
--Deployment starts to the org
+### Setting Up the Environment
 
+#### Salesforce Setup
 
+1. **Install Salesforce CLI**: [Download Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli)
+2. **Salesforce Extension Pack**: Install Salesforce Extension Pack for VS Code
+3. **Create a SF DEV org**: [Sign Up](https://developer.salesforce.com/signup)
+4. **Connect VS Code to the DEV org**
 
-Dev:
-Validacio (delta)
-Deploy (ha lehet quick deploy - noTestRun)
+#### GitHub Setup
 
-Ejfelkor full deploy
+1. **Register on GitHub**: [Sign Up](https://github.com/join)
+2. **Create a repository**: [New Repository](https://github.com/new)
+3. **Download GitHub Desktop and connect your repository**: [Download Github Desktop](https://github.com/apps/desktop)
+4. **Generate sfdxAuthUrl:**
+   - Login to your orgs from VS code
+   - Generate and save your sfdxAuthUrl:
+   ```sf org display --verbose --json -o your-org-name ```
 
-Test:
-PR-ra ugyanugy approve kell
-Dev-bol fogadjon csak PR-t ha lehet
-Validacio osszes teszt futassal
-Utana Approve
-Deploy (noTestRunnal)
+---
 
-master:
-csak a testbol
-teljes validacio
-itt is approve
-teljes deploy (noTestRun, itt ugyis lefog futni valoszinuleg mert ez a prod)
+## GitHub Configuration
 
-Rectrict PR-s for branches(github setting or workflow):
+### Repository Secrets and Permissions
 
-Restrict who can push to matching branches
-https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
+1. **Create repository secrets:**
+   - Go to repository Settings > Secrets and Variables > Actions > New Repository Secret
+   - Create the secrets with the following names and set the values to the previously generated sfdxAuthUrls
+   - SFDX_AUTH_URL_DEV
+   - SFDX_AUTH_URL_TEST
+   - SFDX_AUTH_URL
 
-name: 'Check Branch'
+2. **Add repository variables:**
+   - Change to variables tab and add New repository variables:
+   - DEV_BRANCH = dev
+   - TEST_BRANCH = test
+   - PROD_BRANCH = prod
+   - INT_ORG = INT
 
-on:
-  pull_request:
+3. **Set workflow permissions:**
+   - Go to Settings > Actions > General.
+   - Set Read and Write permissions.
 
-jobs:
-  check_branch:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check branch
-        if: github.base_ref == 'main' && github.head_ref != 'dev'
-        run: |
-          echo "ERROR: You can only merge to main from dev."
-          exit 1
+### GitHub Branch Rules
 
+1. **Add Rules to branches:**
+   - Repeat the steps bellow for each of your branches
+   - Go to repository Settings > Rules > Rulesets.
+   - Add new Ruleset with configurations:
+     - Target: Your branch name (dev, test, prod)
+     - Restrict deletions
+     - Require pull request before merging
+     - Required Approvals (1)
+     - Dismiss stale pull request approvals when new commits are pushed
+     - Require approval of the most recent reviewable push
+     - Require status checks to pass (e.g., validate)
+     - Block force pushes
 
--if deployment successful -> merge code into git
+![GitHub Branch Rules](.github/images/githubRuleset.jpg)
+2. **It is possible to restrict who can push to branches. To set it up follow the documentation:**
+     - [Protection rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule)
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+---
 
-#Kiszedni orgbol a Quick deploy ID-t? kilehet-e
-Generikussa tenni a deploy workflowkat (eleg 1 is nem kell minden btacnhre/orgra)
-Action ful alatt elnevezesek
+## Workflows, Actions, and Scripts
 
-1.Delta validacio specifikus tesztekkel 
-2.Delta bevetes tesztek nelkul
-3.Teljes bevetes tesztekkel (napi 1)
-4.Validacio teljes tesztekkel
-5.Gyors bevetes, ha ezt nem lehet mert eles (3 es 5 osszevonhato?)
+### Pull Request flow automation
 
-## How Do You Plan to Deploy Your Changes?
-
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
-
-## Configure Your Salesforce DX Project
-
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
-
-- [Modification for commit v2]
+#### Pull Request process
+1. **PR Creation**
+   - Branch rules require an approval and the Validation workflow to run. Validation workflow start automatically after the PR is created.
+2. **Validation**
+   - Validate the changes against target org. Types:
+        Delta: TEST_LEVEL is: RunSpecifiedTests. Runs only changes regarding the changed files
+        Full: TEST_LEVEL is: RunLocalTests. Runs all test
+3. **PR Approval**
+   - PR needs to be approved at least by one approver after the Validation executes successfully. It triggers the automatic Deployment. 
+4. **Deployment**
+   - Deploy the changes to the target org. Types:
+        Full: deploy the branch to the org
+        Delta: deploy only the changes files to the org
+        Quick: deploy the last validated deployment to the org
+5. **Merge**
+   - Code is merged to the target branch after successful deployment
+#### Key componenet of the validation workflow
