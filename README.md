@@ -98,5 +98,5 @@
      - Under jobs: -> validate: -> name: Set SFDX Auth URL and Test Level we define the sfdxAuthUrl based on the target org and the test level for the validation. DEPLOY_TYPE variable controls if the validation is DELTA validation or FULL validation. Two combination is possible:
       - DEPLOY_TYPE = DELTA and TEST_LEVEL = RunSpecifiedTests
       - DEPLOY_TYPE = FULL and TEST_LEVEL = RunLocalTests
-![GitHub Branch Rules](.github/images/validation1.png)
-![GitHub Branch Rules](.github/images/validation2.png)
+![GitHub Branch Rules](.github/images/validation1.jpg)
+![GitHub Branch Rules](.github/images/validation2.jpg)
