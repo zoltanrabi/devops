@@ -18,7 +18,7 @@
    - Login to your orgs from VS code
    - Generate and save your sfdxAuthUrl by running the following command (replace your-org-name with your org name):
    ```sf org display --verbose --json -o your-org-name ```
-   - Save the content of the marked line (string after "force://PlatformCLI::)
+   - Save the content of the marked line (including force://PlatformCLI::)
 ![GitHub Branch Rules](.github/images/sfdxAuthUrl.png)
 ---
 
