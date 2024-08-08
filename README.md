@@ -157,6 +157,7 @@
    ```sf data export tree --target-org mysforg –query “<Your Query>” --prefix export-demo --output-dir .github/data –plan```
    - Make sure that your data is in the .github/data folder
    - Setup the desired branch and setup the path for the DATA_FOLDER variable
+   - To change the target org, you can change the SFDX_AUTH_URL. By default it imports data from ref branch(DEV) to INT org.
 ![GitHub Branch Rules](.github/images/import.jpg)
 2. **Import data**
    - In your repository go to the Actions tab
