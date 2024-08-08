@@ -70,6 +70,7 @@
 ### Pull Request flow automation
 
 #### Pull Request process
+![GitHub Branch Rules](.github/images/PRworkflow.png)
 1. **PR Creation**
    - Branch rules require an approval and the Validation workflow to run. Validation workflow start automatically after the PR is created.
 2. **Validation**
@@ -157,6 +158,7 @@
    ```sf data export tree --target-org mysforg –query “<Your Query>” --prefix export-demo --output-dir .github/data –plan```
    - Make sure that your data is in the .github/data folder
    - Setup the desired branch and setup the path for the DATA_FOLDER variable
+   - To change the target org, you can change the SFDX_AUTH_URL. By default it imports data from ref branch(DEV) to INT org.
 ![GitHub Branch Rules](.github/images/import.jpg)
 2. **Import data**
    - In your repository go to the Actions tab
