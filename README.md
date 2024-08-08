@@ -106,22 +106,29 @@
    - It contains similar configurations like the validation workflow:
      - run-name: it will generate the name for the workflow which is visible in the Action tab in the GitHub repository. It check against which branch we are doing the validation. It generates the corresponding Action name with the org names
      - Under jobs: -> validate: -> name: Set Environment Variables. It defines the sfdxAuthUrl based on the target org and the DEPLOY_TYPE for the deployment. DEPLOY_TYPE variable controls if the deployment is DELTA, FULL or QUICK deployment.
-**3. Add new branch for validation workflow**
+![GitHub Branch Rules](.github/images/deploy1.jpg)
+![GitHub Branch Rules](.github/images/deploy2.jpg)
+3. **Add new branch for validation workflow**
    - Create a new Repository variable with your branch name
    - Add your branch name to the branches section so it will triggered when a PR is created to that branch
+![GitHub Branch Rules](.github/images/validationAdd1.jpg)
    - Copy-paste a new line in the run-name section and configure the desired action name
+![GitHub Branch Rules](.github/images/validationAdd2.jpg)
    - Copy-paste an elseif statement in the Set SFDX Auth URL and Test Level job. Replace the branch repository variables with yours and setup the desired TEST_LEVEL and DEPLOY_TYPE. Two combination is possible:
      - DEPLOY_TYPE = DELTA and TEST_LEVEL = RunSpecifiedTests
      - DEPLOY_TYPE = FULL and TEST_LEVEL = RunLocalTests
-**4. Add new branch for deployment workflow**
+![GitHub Branch Rules](.github/images/validationAdd3.jpg)
+4. **Add new branch for deployment workflow**
    - Create a new Repository variable with your branch name (or use the one what you created when you added a new branch for validation)
    - Copy-paste a new line in the run-name section and configure the desired action name
+![GitHub Branch Rules](.github/images/deployAdd1.jpg)
    - Copy-paste an elseif statement in the Set SFDX Auth URL and Test Level job. Replace the branch repository variables with yours and setup the desired DEPLOY_TYPE. Possible deployment types
      - FULL: deploy the branch to the org
      - DELTA: deploy only the changes files to the org
      - QUICK: deploy the last validated deployment to the org. It can be used for example in prod. It queries the Id of the last validation job from the org and use it for Quick deployment
+![GitHub Branch Rules](.github/images/deployAdd2.jpg)
 ### Scheduled Deploy to Org
-**1. Usage**
+1. **What does it do?**
    - By default it deploy the dev branch to the INT org
    - It runs every midnight
    - Timing defined by cron expression: '0 0 * * *'
@@ -138,3 +145,9 @@
 | `0 0 * * *`         | Every day at 12:00 AM                 |
 | `0 0 * * FRI`       | At 12:00 AM, only on Friday           |
 | `0 0 1 * *`         | At 12:00 AM, on day 1 of the month    |
+2. **Configuration**
+   - Based on the tables above, you can modify the cron expression and thus adjust the timing of this flow
+   - After ref: you can change the reference to a different branch name. This branch will will be used for deplyoment
+   - You can change the variable in the name so it will name your job correctly while running. Create a Repository variable or hard code it
+   - Change the target or by assigning another value to the SFDX_AUTH_URL variable
+![GitHub Branch Rules](.github/images/schedule.jpg)
