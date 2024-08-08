@@ -9,12 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ vars.DEV_BRANCH }}
+          ref: ${{ vars.INT_BRANCH }}
           fetch-depth: 0
 
       - name: Import data to ${{ vars.INT_ORG }} org
         uses: ./.github/actions/sf-import-data
         with:
           WAIT: 30
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_INT }}
           DATA_FOLDER: .github/data/export-demo-Account-Contact-Opportunity-plan.json
