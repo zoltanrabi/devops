@@ -16,7 +16,7 @@
 3. **Download GitHub Desktop and connect your repository:** [Download Github Desktop](https://github.com/apps/desktop)
 4. **Generate sfdxAuthUrl:**
    - Login to your orgs from VS code
-   - Generate and save your sfdxAuthUrl:
+   - Generate and save your sfdxAuthUrl by running the following command (replace your-org-name with your org name):
    ```sf org display --verbose --json -o your-org-name ```
    - Save the contect of the marked line (string after "force://PlatformCLI::)
 ![GitHub Branch Rules](.github/images/sfdxAuthUrl.jpg)
@@ -151,3 +151,15 @@
    - You can change the variable in the name so it will name your job correctly while running. Create a Repository variable or hard code it
    - Change the target or by assigning another value to the SFDX_AUTH_URL variable
 ![GitHub Branch Rules](.github/images/schedule.jpg)
+### Import Data from GitHub to Org
+1. **Create your data**
+   - Place your query into the following command and run it to generate data from your org. 
+   ```sf data export tree --target-org mysforg –query “<Your Query>” --prefix export-demo --output-dir .github/data –plan```
+   - Make sure that your data is in the .github/data folder
+   - Setup the desired branch and setup the path for the DATA_FOLDER variable
+![GitHub Branch Rules](.github/images/import.jpg)
+2. **Import data**
+   - In your repository go to the Actions tab
+   - On the left side select Import data to INT
+   - On the right side select run workflow
+   - It doesn’t matter which org you select in the dropdown menu. It will import data to the org which is configured in the workflow
