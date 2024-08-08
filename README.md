@@ -132,7 +132,7 @@
 1. **What does it do?**
    - By default it deploy the _int branch_ to the _INT org_
    - It runs every midnight
-   - Timing defined by cron expression: '0 0 * * *' EJJEL 2 LEGYEN
+   - Timing defined by cron expression: '0 0 * * *'
    - Cron cheatsheet:
 # Cron Fields Table
 | `*` | `*` | `*` | `*` | `*` |
