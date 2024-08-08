@@ -14,4 +14,4 @@ public class AccountSecond {
         Account acc = [SELECT Id FROM Account WHERE Id = :accountId];
         delete acc;
     }
-}
+} 
