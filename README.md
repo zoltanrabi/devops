@@ -70,6 +70,7 @@
 ### Pull Request flow automation
 
 #### Pull Request process
+![GitHub Branch Rules](.github/images/PRworkflow.png)
 1. **PR Creation**
    - Branch rules require an approval and the Validation workflow to run. Validation workflow start automatically after the PR is created.
 2. **Validation**
