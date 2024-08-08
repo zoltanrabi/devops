@@ -1,4 +1,4 @@
-## Solutions with GitHub Actions
+## CI/CD Solutions with GitHub Actions
 
 ### Setting Up the Environment
 
@@ -29,16 +29,16 @@
 1. **Create repository secrets:**
    - Go to repository Settings > Secrets and Variables > Actions > New Repository Secret
    - Create the secrets with the following names and set the values to the previously generated sfdxAuthUrls:
-    - SFDX_AUTH_URL_DEV
-    - SFDX_AUTH_URL_TEST
-    - SFDX_AUTH_URL
+     - SFDX_AUTH_URL_DEV
+     - SFDX_AUTH_URL_TEST
+     - SFDX_AUTH_URL
 
 2. **Add repository variables:**
    - Change to variables tab and add New repository variables:
-    - DEV_BRANCH = dev
-    - TEST_BRANCH = test
-    - PROD_BRANCH = prod
-    - INT_ORG = INT
+     - DEV_BRANCH = dev
+     - TEST_BRANCH = test
+     - PROD_BRANCH = prod
+     - INT_ORG = INT
 
 3. **Set workflow permissions:**
    - Go to Settings > Actions > General.
@@ -74,29 +74,67 @@
    - Branch rules require an approval and the Validation workflow to run. Validation workflow start automatically after the PR is created.
 2. **Validation**
    - Validate the changes against target org. Types:
-        Delta: TEST_LEVEL is: RunSpecifiedTests. DELTA validation means that test only those will run which are connected to the changes in the PR:
-        - Test classes: changed test classes
-        - Normal classes/triggerclasses: Test classes which are related to a changed class (for example: if AccountTrigger.cls is changed the code will try to find test classes which has Test at the end of the class name and Account anywhere in the class name)
-        - Validation rule: Object related test classes related to a changed validation rule (for example: if you change Validation rule related to the Account Object the code will gather the test classes which has Test at the end of the class name and Account anywhere in the class name)
-        - Record-Triggered flows: Test classes realted to Record-Triggered flows
-        - Fields: The test classes related to the Object for which field is changed
-        Full: TEST_LEVEL is: RunLocalTests. Runs all test
+     - Delta: TEST_LEVEL is: RunSpecifiedTests. DELTA validation means that test only those will run which are connected to the changes in the PR:
+       - Test classes: changed test classes
+       - Normal classes/triggerclasses: Test classes which are related to a changed class (for example: if AccountTrigger.cls is changed the code will try to find test classes which has Test at the end of the class name and Account anywhere in the class name)
+       - Validation rule: Object related test classes related to a changed validation rule (for example: if you change Validation rule related to the Account Object the code will gather the test classes which has Test at the end of the class name and Account anywhere in the class name)
+       - Record-Triggered flows: Test classes realted to Record-Triggered flows
+       - Fields: The test classes related to the Object for which field is changed
+     - Full: TEST_LEVEL is: RunLocalTests. Runs all test
 3. **PR Approval**
    - PR needs to be approved at least by one approver after the Validation executes successfully. It triggers the automatic Deployment. 
 4. **Deployment**
-   - Deploy the changes to the target org. Types:
-        Full: deploy the branch to the org
-        Delta: deploy only the changes files to the org
-        Quick: deploy the last validated deployment to the org
+   - Deploy the changes to the target org. None of the three option run(TEST_LEVEL=NoTestRun) test because tests were already executed during the validation. Types:
+     - FULL: deploy the branch to the org
+     - DELTA: deploy only the changes files to the org
+     - QUICK: deploy the last validated deployment to the org. It can be used for example in prod. It queries the Id of the last validation job from the org and use it for Quick deployment
 5. **Merge**
    - Code is merged to the target branch after successful deployment
-#### Key componenet of the validation workflow
+#### Validation and deployment workflow key components and configuration
 1. **Validation.yml workflow**
+   - It triggers when a PR is created
    - It contains the configuration for the validation:
      - branches: the used branch names are listed (dev, test, prod)
      - run-name: it will generate the name for the workflow which is visible in the Action tab in the GitHub repository. It check against which branch we are doing the validation. It generates the corresponding Action name with the org names
-     - Under jobs: -> validate: -> name: Set SFDX Auth URL and Test Level we define the sfdxAuthUrl based on the target org and the test level for the validation. DEPLOY_TYPE variable controls if the validation is DELTA validation or FULL validation. Two combination is possible:
-      - DEPLOY_TYPE = DELTA and TEST_LEVEL = RunSpecifiedTests
-      - DEPLOY_TYPE = FULL and TEST_LEVEL = RunLocalTests
+     - Under jobs: -> validate: -> name: Set SFDX Auth URL and Test Level. It defines the sfdxAuthUrl based on the target org and the test level for the validation. DEPLOY_TYPE variable controls if the validation is DELTA validation or FULL validation. Two combination is possible:
+       - DEPLOY_TYPE = DELTA and TEST_LEVEL = RunSpecifiedTests
+       - DEPLOY_TYPE = FULL and TEST_LEVEL = RunLocalTests
 ![GitHub Branch Rules](.github/images/validation1.jpg)
 ![GitHub Branch Rules](.github/images/validation2.jpg)
+2. **Deploy.yml workflow**
+   - It triggers when a PR is approved
+   - It contains similar configurations like the validation workflow:
+     - run-name: it will generate the name for the workflow which is visible in the Action tab in the GitHub repository. It check against which branch we are doing the validation. It generates the corresponding Action name with the org names
+     - Under jobs: -> validate: -> name: Set Environment Variables. It defines the sfdxAuthUrl based on the target org and the DEPLOY_TYPE for the deployment. DEPLOY_TYPE variable controls if the deployment is DELTA, FULL or QUICK deployment.
+**3. Add new branch for validation workflow**
+   - Create a new Repository variable with your branch name
+   - Add your branch name to the branches section so it will triggered when a PR is created to that branch
+   - Copy-paste a new line in the run-name section and configure the desired action name
+   - Copy-paste an elseif statement in the Set SFDX Auth URL and Test Level job. Replace the branch repository variables with yours and setup the desired TEST_LEVEL and DEPLOY_TYPE. Two combination is possible:
+     - DEPLOY_TYPE = DELTA and TEST_LEVEL = RunSpecifiedTests
+     - DEPLOY_TYPE = FULL and TEST_LEVEL = RunLocalTests
+**4. Add new branch for deployment workflow**
+   - Create a new Repository variable with your branch name (or use the one what you created when you added a new branch for validation)
+   - Copy-paste a new line in the run-name section and configure the desired action name
+   - Copy-paste an elseif statement in the Set SFDX Auth URL and Test Level job. Replace the branch repository variables with yours and setup the desired DEPLOY_TYPE. Possible deployment types
+     - FULL: deploy the branch to the org
+     - DELTA: deploy only the changes files to the org
+     - QUICK: deploy the last validated deployment to the org. It can be used for example in prod. It queries the Id of the last validation job from the org and use it for Quick deployment
+### Scheduled Deploy to Org
+**1. Usage**
+   - By default it deploy the dev branch to the INT org
+   - It runs every midnight
+   - Timing defined by cron expression: '0 0 * * *'
+   - Cron cheatsheet:
+# Cron Fields Table
+| `*` | `*` | `*` | `*` | `*` |
+|-----|-----|-----|-----|-----|
+| Minute (0-59) | Hour (0-23) | Day of the Month (1-31) | Month (1-12) | Day of the Week (0-6) |
+
+| **Cron Expression** | **Schedule**                          |
+|---------------------|----------------------------------------|
+| `* * * * *`         | Every minute                          |
+| `0 * * * *`         | Every hour                            |
+| `0 0 * * *`         | Every day at 12:00 AM                 |
+| `0 0 * * FRI`       | At 12:00 AM, only on Friday           |
+| `0 0 1 * *`         | At 12:00 AM, on day 1 of the month    |
