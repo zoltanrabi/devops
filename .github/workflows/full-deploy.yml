@@ -1,4 +1,4 @@
-name: Scheduled Full Deploy To Dev
+name: Scheduled Full Deploy To Int
 
 on:
   schedule:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ vars.DEV_BRANCH }}
+          ref: ${{ vars.INT_BRANCH }}
           fetch-depth: 0
 
       - name: Deploy full repository to ${{ vars.INT_ORG }} org
@@ -20,4 +20,4 @@ jobs:
           DRY_RUN: false
           TEST_LEVEL: RunLocalTests
           WAIT: 30
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_DEV }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_INT }}
