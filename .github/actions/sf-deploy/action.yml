@@ -7,96 +7,119 @@ branding:
 
 inputs:
   DRY_RUN:
-    description: "Validate deploy and run Apex tests but don't save to the org."
+    description: "Validate deploy and run Apex tests but don't save to the org."  # Optional: run validation without applying changes
     type: boolean
   TEST_LEVEL:
-    description: "Deployment Apex testing level."
+    description: "Deployment Apex testing level."  # Defines the level of Apex tests to be run during deployment
     type: choice
-    default: RunLocalTests
+    default: RunLocalTests  # Default test level if not specified
     options:
-      - NoTestRun
-      - RunSpecifiedTests
-      - RunLocalTests
-      - RunAllTestsInOrg
+      - NoTestRun  # No tests will be run
+      - RunSpecifiedTests  # Run only tests specified in the TEST_LIST
+      - RunLocalTests  # Run all tests in the local source
+      - RunAllTestsInOrg  # Run all tests in the org
   WAIT:
-    description: "Number of minutes to wait for command to complete and display results."
+    description: "Number of minutes to wait for command to complete and display results."  # Time to wait for the deployment process to complete
     type: number
-    default: 30
+    default: 30  # Default wait time in minutes
   SFDX_AUTH_URL:
-    description: "The authorization URL for the deployment environment"
+    description: "The authorization URL for the deployment environment"  # URL used to authenticate the Salesforce CLI
     type: string
-    required: true
+    required: true  # This input is required
   DEPLOY_TYPE:
-    description: "Validate only delta package or full"
+    description: "Validate only delta package or full"  # Type of deployment (delta or full)
     type: string
 
 runs:
-  using: "composite"
+  using: "composite"  # Defines that this is a composite action using multiple steps
   steps:
     - name: Install Salesforce CLI
       shell: bash
       run: |
+        # Install the Salesforce CLI globally on the runner
         npm install -g @salesforce/cli
+        # Install the sfdx-git-delta plugin to handle delta deployments based on Git diffs
         echo y | sf plugins:install sfdx-git-delta  
 
     - name: Login to Environment
       shell: bash
       run: |
+        # Login to Salesforce using the provided authorization URL
+        # The --set-default flag sets this org as the default for subsequent Salesforce CLI commands
+        # The --sfdx-url-file flag allows passing the URL through a temporary file
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
 
     - name: Fetch branches
       shell: bash
       run: |
+        # Fetch the base branch of the pull request (the target branch for the deployment)
         git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
+        # Fetch the head branch of the pull request (the source branch with changes)
         git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
 
     - name: Generate package.xml
-      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' }}
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' }}  # Execute this step only if the DEPLOY_TYPE is 'DELTA'
       shell: bash
       run: |
+        # Set environment variables for the base and compare branches
         BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
         COMPARE_BRANCH="${{ github.event.pull_request.head.ref }}"
+        # Generate a delta deployment package based on changes between the base and compare branches
         sf sgd:source:delta --to "refs/heads/$COMPARE_BRANCH" --from "refs/heads/$BASE_BRANCH" --output '.'
+        # Display the contents of the generated package.xml file and destructiveChanges.xml file
         echo "Deployment package:"
         cat package/package.xml
         echo -e "\nDestructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
 
     - name: Collect test classes
-      if: ${{ inputs.TEST_LEVEL == 'RunSpecifiedTests' }}
+      if: ${{ inputs.TEST_LEVEL == 'RunSpecifiedTests' }}  # Execute this step only if TEST_LEVEL is 'RunSpecifiedTests'
       shell: bash
       run: |
+        # Run a Python script to collect the list of test classes to execute
         TESTS=$(python ./.github/scripts/testCollector.py)
+        # Set an environment variable with the list of test classes
         echo "TEST_LIST=$TESTS" >> $GITHUB_ENV
+        # Display the collected test classes
         echo "The following tests were specified to run:" $TESTS
 
     - name: Validate Deployment to Environment
       shell: bash
       run: |
+        # Initialize an array to hold deployment flags
         deployFlags=(
-            --wait ${{ inputs.WAIT }}
+            --wait ${{ inputs.WAIT }}  # Add wait time as a flag for the deployment command
         )
+        # Add flags based on the DEPLOY_TYPE
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "DELTA" ]]; then
+          # Add flags for delta deployments, including the manifest and post-destructive changes files
           deployFlags+=( --manifest package/package.xml )
           deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
         fi
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
+          # Add flag for full deployments including all files in the source directory
           deployFlags+=( --source-dir force-app )
         fi
+        # Add test level and test list based on the TEST_LEVEL setting
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
+          # Run specified tests if TEST_LEVEL is 'RunSpecifiedTests' and TEST_LIST is not empty
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
           deployFlags+=( --tests $TEST_LIST )
           echo "Test runs in the following mode: RunSpecifiedTests"
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" != "RunSpecifiedTests" ]]; then
+          # Run tests based on other specified test levels
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
           echo "Test runs in the following mode: "${{ inputs.TEST_LEVEL }}
         fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -z "$TEST_LIST" ]]; then
+          # Handle the case where 'RunSpecifiedTests' is set but no tests are specified
           deployFlags+=( --test-level NoTestRun )
           echo "Test runs in the following mode: NoTestRun"
         fi
+        # Add the dry run flag if DRY_RUN is set to true
         if [ "${{ inputs.DRY_RUN }}" = "true" ]; then
           deployFlags+=( --dry-run )
         fi
+        # Start the Salesforce deployment process with the specified flags
         sf project deploy start "${deployFlags[@]}"
