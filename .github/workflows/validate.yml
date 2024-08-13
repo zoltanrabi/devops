@@ -1,14 +1,16 @@
 name: Validate
 
+# Trigger this workflow on pull requests targeting specified branches
 on:
   pull_request:
     branches:
-      - int
-      - uat
-      - main
+      - int  # Trigger on pull requests to 'int' branch
+      - uat  # Trigger on pull requests to 'uat' branch
+      - main # Trigger on pull requests to 'main' branch
     paths:
-      - 'force-app/**'
+      - 'force-app/**' # Only trigger if changes are made in 'force-app' directory
 
+# Dynamically set the run name based on the target branch of the pull request
 run-name: >-
   ${{ github.event.pull_request.base.ref == 'int' && format('Validate to INT by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) || 
       github.event.pull_request.base.ref == 'uat' && format('Validate to UAT by {0} PR Name: {1}', github.event.pull_request.user.login, github.event.pull_request.title) ||
@@ -17,12 +19,13 @@ run-name: >-
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
+          fetch-depth: 0  # Fetch all history to ensure all commits are available
+# Set environment variables based on the target branch of the pull request
       - name: Set SFDX Auth URL and Test Level
         run: |
           if [ "${{ github.event.pull_request.base.ref }}" == "${{ vars.INT_BRANCH }}" ]; then
@@ -42,8 +45,8 @@ jobs:
       - name: Validate
         uses: ./.github/actions/sf-deploy
         with:
-          DRY_RUN: true
-          TEST_LEVEL: ${{ env.TEST_LEVEL }}
-          WAIT: 30
-          SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
-          DEPLOY_TYPE: ${{ env.DEPLOY_TYPE }}
+          DRY_RUN: true  # Run the validation in dry-run mode (no actual deployment)
+          TEST_LEVEL: ${{ env.TEST_LEVEL }}  # Pass the test level environment variable
+          WAIT: 30  # Wait time in seconds before finishing
+          SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}  # Pass the Salesforce DX authentication URL
+          DEPLOY_TYPE: ${{ env.DEPLOY_TYPE }}  # Pass the deployment type
