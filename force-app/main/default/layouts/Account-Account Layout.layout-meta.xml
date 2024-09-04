@@ -250,14 +250,6 @@
     <relatedLists>
         <relatedList>RelatedNoteList</relatedList>
     </relatedLists>
-    <relatedLists>
-        <fields>Name</fields>
-        <fields>OWNER_NAME</fields>
-        <fields>CollaborationUrl</fields>
-        <fields>Status</fields>
-        <fields>StartedDateTime</fields>
-        <relatedList>Swarm</relatedList>
-    </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>
