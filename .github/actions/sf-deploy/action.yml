@@ -78,11 +78,12 @@ runs:
         )
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "DELTA" ]]; then
           deployFlags+=( --manifest package/package.xml )
-          deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
         fi
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
           deployFlags+=( --source-dir force-app )
         fi
+        deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
+        deployFlags+=( --ignore-warnings )
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
           deployFlags+=( --tests $TEST_LIST )

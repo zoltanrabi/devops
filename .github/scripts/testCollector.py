@@ -112,9 +112,11 @@ def extract_objects_from_package_xml(xml_file):
     
     return referenced_objects
 
-test_classes = list_apex_classes(package_xml_path, classes_folder_path)
-flow_names = get_flows_from_package(package_xml_path)
-related_objects = collect_flow_related_objects(flow_folder_path, flow_names)
-related_objects.update(extract_objects_from_package_xml(package_xml_path))
-test_classes.update(find_test_classes(classes_folder_path, related_objects))
+test_classes = set()
+if os.path.exists(classes_folder_path) and os.path.isdir(classes_folder_path):
+    test_classes = list_apex_classes(package_xml_path, classes_folder_path)
+    flow_names = get_flows_from_package(package_xml_path)
+    related_objects = collect_flow_related_objects(flow_folder_path, flow_names)
+    related_objects.update(extract_objects_from_package_xml(package_xml_path))
+    test_classes.update(find_test_classes(classes_folder_path, related_objects))
 print(' '.join(test_classes))
