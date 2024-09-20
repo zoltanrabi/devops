@@ -9,6 +9,10 @@ inputs:
   DRY_RUN:
     description: "Validate deploy and run Apex tests but don't save to the org."
     type: boolean
+  DESTRUCIVE:
+    description: "Is destructive delta to be deleted."
+    type: boolean
+    default: true
   TEST_LEVEL:
     description: "Deployment Apex testing level."
     type: choice
@@ -82,8 +86,10 @@ runs:
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
           deployFlags+=( --source-dir force-app )
         fi
-        deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
-        deployFlags+=( --ignore-warnings )
+        if [ "${{ inputs.DESTRUCIVE }}" = "true" ]; then
+          deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
+          deployFlags+=( --ignore-warnings )
+        fi
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
           deployFlags+=( --test-level ${{ inputs.TEST_LEVEL }} )
           deployFlags+=( --tests $TEST_LIST )
