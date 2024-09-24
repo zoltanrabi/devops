@@ -12,7 +12,7 @@ public class OpportunityProcessorTest {
         Opportunity updatedOpp = [SELECT Id, StageName FROM Opportunity WHERE Id = :opp.Id];
         System.assertEquals('Closed Won', updatedOpp.StageName, 'Opportunity stage should be updated');
     }
- 
+
     @isTest
     static void testCalculateTotalAmount() {
         Opportunity opp1 = new Opportunity(Name = 'Opp1', StageName = 'Prospecting', CloseDate = Date.today(), Amount = 1000);
