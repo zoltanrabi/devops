@@ -9,6 +9,10 @@ inputs:
   DRY_RUN:
     description: "Validate deploy and run Apex tests but don't save to the org."  # Optional: run validation without applying changes
     type: boolean
+  DESTRUCIVE:
+    description: "Is destructive delta to be deleted."
+    type: boolean
+    default: true
   TEST_LEVEL:
     description: "Deployment Apex testing level."  # Defines the level of Apex tests to be run during deployment
     type: choice
@@ -35,11 +39,12 @@ runs:
   steps:
     - name: Install Salesforce CLI
       shell: bash
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' || inputs.DESTRUCIVE == 'true'}}
       run: |
         # Install the Salesforce CLI globally on the runner
         npm install -g @salesforce/cli
         # Install the sfdx-git-delta plugin to handle delta deployments based on Git diffs
-        echo y | sf plugins:install sfdx-git-delta  
+        echo y | sf plugins:install sfdx-git-delta
 
     - name: Login to Environment
       shell: bash
@@ -50,6 +55,7 @@ runs:
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
 
     - name: Fetch branches
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' || inputs.DESTRUCIVE == 'true'}}
       shell: bash
       run: |
         # Fetch the base branch of the pull request (the target branch for the deployment)
@@ -58,7 +64,7 @@ runs:
         git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
 
     - name: Generate package.xml
-      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' }}  # Execute this step only if the DEPLOY_TYPE is 'DELTA'
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' || inputs.DESTRUCIVE == 'true'}}  # Execute this step only if the DEPLOY_TYPE is 'DELTA'
       shell: bash
       run: |
         # Set environment variables for the base and compare branches
@@ -94,7 +100,10 @@ runs:
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "DELTA" ]]; then
           # Add flags for delta deployments, including the manifest and post-destructive changes files
           deployFlags+=( --manifest package/package.xml )
+        fi
+        if [ "${{ inputs.DESTRUCIVE }}" = "true" ]; then
           deployFlags+=( --post-destructive-changes destructiveChanges/destructiveChanges.xml )
+          deployFlags+=( --ignore-warnings )
         fi
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
           # Add flag for full deployments including all files in the source directory
