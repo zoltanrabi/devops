@@ -39,7 +39,7 @@ runs:
   steps:
     - name: Install Salesforce CLI
       shell: bash
-      if: ${{ inputs.DEPLOY_TYPE = 'DELTA' || inputs.DESTRUCIVE = 'true'}}
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' || inputs.DESTRUCIVE == 'true'}}
       run: |
         # Install the Salesforce CLI globally on the runner
         npm install -g @salesforce/cli
@@ -55,7 +55,7 @@ runs:
         sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SFDX_AUTH_URL }}")
 
     - name: Fetch branches
-      if: ${{ inputs.DEPLOY_TYPE = 'DELTA' || inputs.DESTRUCIVE = 'true'}}
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' || inputs.DESTRUCIVE == 'true'}}
       shell: bash
       run: |
         # Fetch the base branch of the pull request (the target branch for the deployment)
@@ -64,7 +64,7 @@ runs:
         git fetch origin ${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}
 
     - name: Generate package.xml
-      if: ${{ inputs.DEPLOY_TYPE = 'DELTA' || inputs.DESTRUCIVE = 'true'}}  # Execute this step only if the DEPLOY_TYPE is 'DELTA'
+      if: ${{ inputs.DEPLOY_TYPE == 'DELTA' || inputs.DESTRUCIVE == 'true'}}  # Execute this step only if the DEPLOY_TYPE is 'DELTA'
       shell: bash
       run: |
         # Set environment variables for the base and compare branches
