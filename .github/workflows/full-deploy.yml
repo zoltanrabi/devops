@@ -15,9 +15,11 @@ jobs:
           fetch-depth: 0
 
       - name: Deploy full repository to ${{ vars.INT_ORG }} org
-        uses: ./.github/actions/sf-deploy-full
+        uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: false
           TEST_LEVEL: RunLocalTests
+          DEPLOY_TYPE: FULL
+          DESTRUCIVE: false
           WAIT: 30
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL_INT }}
