@@ -49,10 +49,11 @@ jobs:
 
       - name: Deploy to target org (FULL)
         if: ${{ steps.check_approvals_status.outputs.check_approvals_status == 'success' && env.DEPLOY_TYPE == 'FULL' }}
-        uses: ./.github/actions/sf-deploy-full
+        uses: ./.github/actions/sf-deploy
         with:
           DRY_RUN: false
           TEST_LEVEL: NoTestRun
+          DEPLOY_TYPE: FULL
           WAIT: 30
           SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
 
