@@ -78,6 +78,12 @@ runs:
         echo -e "\nDestructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
 
+    - name: Generate FULL package.xml
+      if: ${{ inputs.DEPLOY_TYPE == 'FULL'}}  # Execute this step only if the DEPLOY_TYPE is 'FULL'
+      shell: bash
+      run: |
+        sfdx force:source:convert -r ./force-app/ -d mdapi2
+
     - name: Collect test classes
       if: ${{ inputs.TEST_LEVEL == 'RunSpecifiedTests' }}  # Execute this step only if TEST_LEVEL is 'RunSpecifiedTests'
       shell: bash
@@ -107,7 +113,7 @@ runs:
         fi
         if [[ "${{ inputs.DEPLOY_TYPE }}" == "FULL" ]]; then
           # Add flag for full deployments including all files in the source directory
-          deployFlags+=( --source-dir force-app )
+          deployFlags+=( --manifest mdapi2/package.xml )
         fi
         # Add test level and test list based on the TEST_LEVEL setting
         if [[ "${{ inputs.TEST_LEVEL }}" == "RunSpecifiedTests" && -n "$TEST_LIST" ]]; then
