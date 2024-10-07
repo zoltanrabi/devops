@@ -75,6 +75,7 @@ runs:
         # Display the contents of the generated package.xml file and destructiveChanges.xml file
         echo "Deployment package:"
         cat package/package.xml
+        python ./.github/scripts/destructiveCleaner.py
         echo -e "\nDestructive Changes:"
         cat destructiveChanges/destructiveChanges.xml
 
